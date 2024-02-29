@@ -40,8 +40,8 @@ const Nav = () => {
       <div className="sm:flex hidden">
         {session?.user ? (
           <div className="flex gap-3 md:gap-5">
-            <Link href="/add-lunch" className="black_btn">
-              Add Lunch
+            <Link href="/add-lunch-idea" className="black_btn">
+              Add Lunch Idea
             </Link>
 
             <button type="button" onClick={signOut} className="outline_btn">
@@ -50,7 +50,7 @@ const Nav = () => {
 
             <Link href="/profile" className="">
               <Image
-                src="/assets/images/logo.svg"
+                src={session?.user.image}
                 width={30}
                 height={30}
                 className="rounded-full"
@@ -82,7 +82,7 @@ const Nav = () => {
         {session?.user ? (
           <div className="flex">
             <Image
-              src="/assets/images/logo.svg"
+              src={session?.user.image}
               width={30}
               height={30}
               className="rounded-full"
@@ -99,11 +99,11 @@ const Nav = () => {
                   My Profile
                 </Link>
                 <Link
-                  href="/add-lunch"
+                  href="/add-lunch-idea"
                   className="dropdown_link"
                   onClick={() => setToggleDropdown(false)}
                 >
-                  Add Lunch
+                  Add Lunch Idea
                 </Link>
                 <button
                   className="mt-5 w-full black_btn"

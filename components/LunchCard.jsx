@@ -1,7 +1,7 @@
 import React from "react";
 
-const LunchCard = () => {
-  return <div>LunchCard</div>;
+const LunchIdeaCard = () => {
+  return <div>LunchIdeaCard</div>;
 };
 
-export default LunchCard;
+export default LunchIdeaCard;

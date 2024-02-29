@@ -5,7 +5,7 @@ import Provider from "@components/Provider";
 
 export const metedata = {
   title: "what-to-eat",
-  description: "Store and share your favorite lunch options.",
+  description: "Store and share your favorite lunch Ideas.",
 };
 
 const RootLayout = ({ children }) => (
