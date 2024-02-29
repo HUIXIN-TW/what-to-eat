@@ -1,5 +1,6 @@
 const nextConfig = {
   experimental: {
+    missingSuspenseWithCSRBailout: false,
     serverComponentsExternalPackages: ["mongoose"],
   },
   images: {
