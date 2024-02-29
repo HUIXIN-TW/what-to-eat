@@ -34,7 +34,7 @@ const handler = NextAuth({
             username: profile.email.split("@")[0],
             email: profile.email,
             name: profile.name.replace(" ", "").toLowerCase(),
-            image: profile.image,
+            image: profile.picture,
           });
         }
 

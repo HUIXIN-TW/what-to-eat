@@ -34,8 +34,8 @@ export const POST = async (request) => {
     cafeName,
     walkingTime,
   } = await request.json();
-  
-  const cleanedTags = preprocessAndCleanTags(tagsString); // Correctly reference tagsString here
+
+  const cleanedTags = preprocessAndCleanTags(tagsString);
 
   // Validate all required fields
   if (!userId || !lunchIdea || !tagsString || !cafeName) {

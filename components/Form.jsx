@@ -55,6 +55,8 @@ const Form = ({ type, post, setPost, submitting, handleSubmit }) => {
         <select
           id="walkingTime"
           name="walkingTime"
+          value={post.walkingTime || ""} // Ensure the select reflects the current state
+          onChange={(e) => setPost({ ...post, walkingTime: e.target.value })}
           className="block w-full pl-3 pr-10 py-3 h-10 text-base border-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm rounded-md"
         >
           <option value="">Any walking time</option>
