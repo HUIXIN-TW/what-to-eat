@@ -1,26 +1,22 @@
 import mongoose from "mongoose";
 
-let isConnected = false; // store connection status
+let isConnected = false; // track the connection
 
 export const connectToDatabase = async () => {
-  mongoose.set("strickQuery", "true");
-
   if (isConnected) {
     console.log("MongoDB is already connected");
     return;
   }
 
   try {
-    await mongoose.connet(process.env.MONOGO_URI, {
+    await mongoose.connect(process.env.MONGODB_URI, {
       dbName: "what-to-eat",
-      useNewUrlParser: true,
-      useUnifiedTopology: true,
     });
 
     isConnected = true;
 
-    console.log("MongoDB is connected");
+    console.log("MongoDB connected");
   } catch (error) {
-    console.log("Error connecting to MongoDB: ", error.message);
+    console.log(error);
   }
 };
