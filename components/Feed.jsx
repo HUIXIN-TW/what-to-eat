@@ -26,16 +26,15 @@ const Feed = () => {
   const [searchTimeout, setSearchTimeout] = useState(null);
   const [searchedResults, setSearchedResults] = useState([]);
 
-  // Fetch all ideas
-  const fetchPosts = async () => {
-    const response = await fetch("/api/lunch-idea");
-    const data = await response.json();
-    setAllPosts(data);
-  };
-
   useEffect(() => {
+    const fetchPosts = async () => {
+      const response = await fetch("/api/lunch-idea");
+      const data = await response.json();
+      setAllPosts(data);
+    };
+
     fetchPosts();
-  }, []);
+  }, []); // Empty dependency array means this effect runs once on mount
 
   const filterLunchIdeas = (searchtext) => {
     const regex = new RegExp(searchtext, "i");
