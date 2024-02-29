@@ -101,6 +101,46 @@
   @apply bg-gradient-to-r from-blue-600 to-cyan-600 bg-clip-text text-transparent;
 }
 
+.purple_gradient {
+  @apply bg-gradient-to-r from-purple-500 to-pink-500 bg-clip-text text-transparent;
+}
+
+.red_gradient {
+  @apply bg-gradient-to-r from-red-500 via-red-600 to-yellow-600 bg-clip-text text-transparent;
+}
+
+.teal_gradient {
+  @apply bg-gradient-to-r from-teal-400 to-cyan-500 bg-clip-text text-transparent;
+}
+
+.indigo_gradient {
+  @apply bg-gradient-to-r from-indigo-500 to-purple-600 bg-clip-text text-transparent;
+}
+
+.lime_gradient {
+  @apply bg-gradient-to-r from-lime-400 to-yellow-500 bg-clip-text text-transparent;
+}
+
+.cool_blue_gradient {
+  @apply bg-gradient-to-r from-blue-300 to-blue-500 bg-clip-text text-transparent;
+}
+
+.warm_sunset_gradient {
+  @apply bg-gradient-to-r from-orange-400 via-red-500 to-pink-600 bg-clip-text text-transparent;
+}
+
+.deep_sea_gradient {
+  @apply bg-gradient-to-r from-blue-800 to-purple-800 bg-clip-text text-transparent;
+}
+
+.sunrise_gradient {
+  @apply bg-gradient-to-r from-yellow-400 via-orange-300 to-red-500 bg-clip-text text-transparent;
+}
+
+.mint_gradient {
+  @apply bg-gradient-to-r from-green-300 to-teal-300 bg-clip-text text-transparent;
+}
+
 .desc {
   @apply mt-5 text-lg text-gray-600 sm:text-xl max-w-2xl;
 }

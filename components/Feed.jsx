@@ -7,7 +7,7 @@ import LunchIdeaCard from "./LunchIdeaCard";
 const LunchIdeaCardList = ({ data, handleTagClick }) => {
   return (
     <div className="mt-16 idea_layout">
-      {data.map((post) => (
+      {data.map((post, index) => (
         <LunchIdeaCard
           key={post._id}
           post={post}
@@ -38,11 +38,11 @@ const Feed = () => {
   }, []);
 
   const filterLunchIdeas = (searchtext) => {
-    const regex = new RegExp(searchtext, "i"); // 'i' flag for case-insensitive search
+    const regex = new RegExp(searchtext, "i");
     return allPosts.filter(
       (item) =>
         regex.test(item.creator.username) ||
-        regex.test(item.tag) ||
+        item.tags.some((tag) => regex.test(tag.replace(/#/g, ""))) ||
         regex.test(item.lunchIdea) ||
         regex.test(item.cafeName) ||
         regex.test(item.walkingTime),
@@ -63,9 +63,13 @@ const Feed = () => {
   };
 
   const handleTagClick = (tagName) => {
-    setSearchText(tagName);
+    // Removes all occurrences of "#"
+    const sanitizedTagName = tagName.replace(/#/g, "");
 
-    const searchResult = filterLunchIdeas(tagName);
+    setSearchText(sanitizedTagName);
+
+    // Call filterLunchIdeas with the sanitized tag name
+    const searchResult = filterLunchIdeas(sanitizedTagName);
     setSearchedResults(searchResult);
   };
 
