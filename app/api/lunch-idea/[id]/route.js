@@ -67,13 +67,16 @@ export const DELETE = async (request, { params }) => {
     await connectToDatabase();
 
     // Log the lunchIdea ID to the console and remove it
-    console.log("Remove Item ID: ", params.id);
+    console.log("Trying to remove Item ID: ", params.id);
 
     // Find the lunchIdea by ID and remove it
-    await LunchIdea.findByIdAndRemove(params.id);
+    await LunchIdea.findOneAndDelete(params.id);
 
     return new Response("LunchIdea deleted successfully", { status: 200 });
   } catch (error) {
-    return new Response("Error deleting lunchIdea", { status: 500 });
+    console.error("Error deleting lunchIdea: ", error.message);
+    return new Response("Error deleting lunchIdea: " + error.message, {
+      status: 500,
+    });
   }
 };

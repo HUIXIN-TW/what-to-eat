@@ -55,7 +55,9 @@ const AddLunchIdea = () => {
   return (
     <>
       {!session ? (
-        <p className="desc">You need to login first before adding lunch ideas.</p>
+        <p className="desc">
+          You need to login first before adding lunch ideas.
+        </p>
       ) : (
         <Form
           type="Add"
