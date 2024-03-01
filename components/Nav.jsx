@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import Image from "next/image";
+import route from "next/router";
 import { useEffect, useState } from "react";
 import { signIn, signOut, useSession, getProviders } from "next-auth/react";
 
@@ -9,6 +10,8 @@ import Logo from "./Logo";
 
 const Nav = () => {
   const { data: session } = useSession();
+
+  const router = route;
 
   const [providers, setProviders] = useState(null);
   const [toggleDropdown, setToggleDropdown] = useState(false);
@@ -104,6 +107,7 @@ const Nav = () => {
                   onClick={() => {
                     setToggleDropdown(false);
                     signOut();
+                    router.push("/");
                   }}
                 >
                   Sign Out
