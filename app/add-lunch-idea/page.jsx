@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 
@@ -11,12 +11,11 @@ const AddLunchIdea = () => {
   const { data: session } = useSession();
   const [submitting, setIsSubmitting] = useState(false);
 
-  // If session doesn't exist, redirect to Home page
-  if (!session) {
-    alert("You need to sign in to add a lunch idea");
-    router.push("/");
-    return null;
-  }
+  useEffect(() => {
+    if (!session) {
+      router.push({ pathname: "/", query: { loginRequired: true } });
+    }
+  }, [session, router]);
 
   // Initially, set post state to empty values
   const [post, setPost] = useState({
