@@ -1,11 +1,10 @@
 {
-    "routes": [
-      {
-        "src": "/api/lunch-idea/.*",
-        "headers": [
-          { "key": "Cache-Control", "value": "no-cache" }
-        ]
+  "routes": [
+    {
+      "src": "/api/lunch-idea/.*",
+      "headers": {
+        "Cache-Control": "no-cache"
       }
-    ]
-  }
-  
+    }
+  ]
+}
