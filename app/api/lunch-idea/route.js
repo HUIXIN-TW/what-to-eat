@@ -9,10 +9,7 @@ export const GET = async (request) => {
     // Fetch all lunchideas
     const lunchideas = await LunchIdea.find({}).populate("creator");
 
-    // Create a new Response object with lunchideas and set Cache-Control header
-    const responseBody = JSON.stringify(lunchideas);
-
-    return new Response(responseBody, { status: 200 });
+    return new Response(JSON.stringify(lunchideas), { status: 200 });
   } catch (error) {
     return new Response("Failed to fetch all lunchideas", { status: 500 });
   }
