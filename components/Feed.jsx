@@ -1,7 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
-
+import { useState } from "react";
 import LunchIdeaCard from "./LunchIdeaCard";
 
 const LunchIdeaCardList = ({ data, handleTagClick }) => {
@@ -18,27 +17,14 @@ const LunchIdeaCardList = ({ data, handleTagClick }) => {
   );
 };
 
-const Feed = () => {
-  const [allPosts, setAllPosts] = useState([]);
-
+const Feed = ({data}) => {
   // Search states
   const [searchText, setSearchText] = useState("");
-  const [searchTimeout, setSearchTimeout] = useState(null);
   const [searchedResults, setSearchedResults] = useState([]);
-
-  useEffect(() => {
-    const fetchPosts = async () => {
-      const response = await fetch("/api/lunch-idea");
-      const data = await response.json();
-      setAllPosts(data);
-    };
-
-    fetchPosts();
-  }, []); // Empty dependency array means this effect runs once on mount
 
   const filterLunchIdeas = (searchtext) => {
     const regex = new RegExp(searchtext, "i");
-    return allPosts.filter(
+    return data.filter(
       (item) =>
         regex.test(item.creator.username) ||
         item.tags.some((tag) => regex.test(tag.replace(/#/g, ""))) ||
@@ -49,16 +35,15 @@ const Feed = () => {
   };
 
   const handleSearchChange = (e) => {
-    clearTimeout(searchTimeout);
-    setSearchText(e.target.value);
+    const searchtext = e.target.value;
+    setSearchText(searchtext);
 
     // debounce method
-    setSearchTimeout(
-      setTimeout(() => {
-        const searchResult = filterLunchIdeas(e.target.value);
-        setSearchedResults(searchResult);
-      }, 500),
-    );
+    clearTimeout(timeoutRef.current);
+    timeoutRef.current = setTimeout(() => {
+      const searchResult = filterLunchIdeas(searchtext);
+      setSearchedResults(searchResult);
+    }, 500);
   };
 
   const handleTagClick = (tagName) => {
@@ -96,7 +81,7 @@ const Feed = () => {
           />
         ))
       ) : (
-        <LunchIdeaCardList data={allPosts} handleTagClick={handleTagClick} />
+        <LunchIdeaCardList data={data} handleTagClick={handleTagClick} />
       )}
     </section>
   );

@@ -70,7 +70,7 @@ export const DELETE = async (request, { params }) => {
     console.log("Trying to remove Item ID: ", params.id);
 
     // Find the lunchIdea by ID and remove it
-    await LunchIdea.deleteOne({ _id:params.id});
+    await LunchIdea.deleteOne({ _id: params.id });
 
     // Return a success response
     return new Response("LunchIdea deleted successfully", { status: 200 });

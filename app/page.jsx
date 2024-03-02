@@ -1,6 +1,28 @@
+"use client";
+
 import Feed from "@components/Feed";
+import { useEffect, useState } from "react";
 
 const Home = () => {
+  const [allPosts, setAllPosts] = useState([]);
+
+  useEffect(() => {
+    const fetchPosts = async () => {
+      try {
+        const response = await fetch("/api/lunch-idea");
+        if (!response.ok) {
+          throw new Error("Failed to fetch data");
+        }
+        const data = await response.json();
+        setAllPosts(data);
+      } catch (error) {
+        console.error("Failed to fetch data:", error.message);
+      }
+    };
+
+    fetchPosts();
+  }, []); // Empty dependency array means this effect runs once on mount
+
   return (
     <section className="w-full flex-center flex-col">
       <h1 className="head_text text-center">
@@ -16,7 +38,7 @@ const Home = () => {
         your lunchtime into an exploration of taste
       </p>
 
-      <Feed />
+      <Feed data={allPosts} />
     </section>
   );
 };
