@@ -6,10 +6,10 @@ import { useRouter, useSearchParams } from "next/navigation";
 
 import Form from "@components/Form";
 
-const UpdateLunchIdea = () => {
+const CopyLunchIdea = () => {
   const router = useRouter();
   const { data: session } = useSession();
-  const [submitting, setIsSubmitting] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const searchParams = useSearchParams();
 
@@ -18,7 +18,6 @@ const UpdateLunchIdea = () => {
 
   // State for storing the prompt details
   const [post, setPost] = useState({
-    creator: "",
     lunchIdea: "",
     tags: "",
     cafeName: "",
@@ -34,20 +33,19 @@ const UpdateLunchIdea = () => {
 
       // Setting the fetched prompt details to the post state
       setPost({
-        creator: data.creator._id,
         cafeName: data.cafeName,
         walkingTime: data.walkingTime,
         lunchIdea: data.lunchIdea,
         tags: data.tags,
       });
     };
-
+    console.log("post", post);
     // Only fetching prompt details if a promptId is present
     if (lunchIdeaId) getLunchIdeaDetails();
   }, [lunchIdeaId]); // Dependency array to re-run the effect if Id changes
 
   // Function to handle the form submission for updating the prompt
-  const updateLunchIdea = async (e) => {
+  const copyLunchIdea = async (e) => {
     // Prevent default form submission behavior
     e.preventDefault();
 
@@ -57,22 +55,19 @@ const UpdateLunchIdea = () => {
     // Early return if promptId is missing
     if (!lunchIdeaId) return alert("Missing LunchIdeaId!");
 
-    if (post.creator !== session?.user.id)
-      return alert("You are not the creator of this lunch idea!");
-
-    // If the user is the creator, update the existing lunch idea
     try {
-      // Sending the updated prompt details to the server
-      const response = await fetch(`/api/lunch-idea/${lunchIdeaId}`, {
-        method: "PATCH",
+      // Send a POST request to the server
+      const response = await fetch("/api/lunch-idea/new", {
+        method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          lunchIdea: post.lunchIdea,
-          cafeName: post.cafeName,
-          walkingTime: post.walkingTime,
-          tags: post.tags,
+          lunchIdea: post.lunchIdea.toString(),
+          userId: session?.user.id,
+          cafeName: post.cafeName.toString(),
+          walkingTime: post.walkingTime.toString(),
+          tags: post.tags.toString(),
         }),
       });
 
@@ -83,22 +78,31 @@ const UpdateLunchIdea = () => {
         const errorData = await response.json();
         console.error("Server responded with an error:", errorData.message);
       }
+      // If there's an error, log it to the console
     } catch (error) {
-      console.log(error);
+      console.error("Failed to submit the form:", error);
     } finally {
       setIsSubmitting(false);
     }
   };
 
   return (
-    <Form
-      type="Edit"
-      post={post}
-      setPost={setPost}
-      submitting={submitting}
-      handleSubmit={updateLunchIdea}
-    />
+    <>
+      {!session ? (
+        <p className="desc">
+          You need to login first before copying lunch ideas.
+        </p>
+      ) : (
+        <Form
+          type="Copy"
+          post={post}
+          setPost={setPost}
+          submitting={isSubmitting}
+          handleSubmit={copyLunchIdea}
+        />
+      )}
+    </>
   );
 };
 
-export default UpdateLunchIdea;
+export default CopyLunchIdea;

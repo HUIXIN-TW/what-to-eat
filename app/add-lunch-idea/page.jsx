@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 
@@ -20,7 +20,10 @@ const AddLunchIdea = () => {
   });
 
   const addLunchIdea = async (e) => {
+    // Prevent default form submission behavior
     e.preventDefault();
+
+    // Set submitting state to true to indicate the start of form submission
     setIsSubmitting(true);
 
     try {

@@ -76,6 +76,7 @@ const Feed = () => {
     <section className="feed">
       <form className="relative w-full flex-center">
         <input
+          id="search_input"
           type="text"
           placeholder="Search for lunch ideas"
           value={searchText}

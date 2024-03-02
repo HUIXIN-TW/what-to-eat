@@ -37,13 +37,12 @@ const MyProfile = () => {
 
   // Function to handle deleting a post
   const handleDelete = async (post) => {
-    const hasConfirmed = confirm(
-      "Are you sure you want to delete this idea?",
-    );
+    const hasConfirmed = confirm("Are you sure you want to delete this idea?");
 
     if (hasConfirmed) {
       try {
         // Send a DELETE request to the server for the selected post
+        console.log("post._id", post._id);
         const response = await fetch(`/api/lunch-idea/${post._id.toString()}`, {
           method: "DELETE",
         });

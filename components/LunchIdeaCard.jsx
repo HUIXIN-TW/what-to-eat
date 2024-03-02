@@ -6,9 +6,6 @@ import { useSession } from "next-auth/react";
 import { usePathname, useRouter } from "next/navigation";
 
 const LunchIdeaCard = ({ post, handleEdit, handleDelete, handleTagClick }) => {
-  // Debug
-  console.log("post", post);
-
   // Using the useSession hook from next-auth/react to access the current session data, if available.
   const { data: session } = useSession();
 
@@ -19,7 +16,10 @@ const LunchIdeaCard = ({ post, handleEdit, handleDelete, handleTagClick }) => {
   const router = useRouter();
 
   // State to keep track of which post's lunch idea has been copied to the clipboard.
-  const [copiedId, setCopiedId] = useState(null);
+  const [copyWordId, setCopyWordId] = useState(null);
+
+  // State to keep track of which post's lunch idea has been copied to the user's profile.
+  const [copyPostId, setCopyPostId] = useState(null);
 
   // Boolean value to determine if the current user can edit or delete the post.
   // This is true if the user is the creator of the post and they are currently viewing their profile page.
@@ -35,37 +35,26 @@ const LunchIdeaCard = ({ post, handleEdit, handleDelete, handleTagClick }) => {
   };
 
   // Asynchronous function to handle the action of copying the lunch idea text to the clipboard.
-  // On success, it sets the copiedId state to the current post's ID, then resets it after 3 seconds.
+  // On success, it sets the copyWordId state to the current post's ID, then resets it after 3 seconds.
   // If the copy action fails, it logs the error to the console. Optionally, you can implement user feedback here.
-  const handleCopyClick = async () => {
+  const handleCopyWordClick = async () => {
     try {
       await navigator.clipboard.writeText(post.lunchIdea); // Note: Ensure the field name matches your post object structure
-      setCopiedId(post._id);
-      setTimeout(() => setCopiedId(null), 3000); // Reset copiedId after 3 seconds
+      setCopyWordId(post._id);
+      setTimeout(() => setCopyWordId(null), 3000); // Reset copyWordId after 3 seconds
     } catch (error) {
       console.error("Copy failed", error);
     }
   };
 
-  const handleAddClick = () => {
-    if (post.creator._id === session?.user.id) {
-      alert("You already have this lunch idea.");
-      return;
-    }
-
-    // Prepare the query parameters with the current post data
-    const params = new URLSearchParams({
-      lunchIdea: post.lunchIdea,
-      tags: post.tags.join(" "),
-      cafeName: post.cafeName,
-      walkingTime: post.walkingTime,
-    }).toString();
-
-    // Navigate to the add-lunch-idea page with parameters
+  const handleCopyPostClick = async () => {
+    // Navigate to the copy-lunch-idea page with parameters
     try {
-      router.push("/add-lunch-idea");
+      setCopyPostId(post._id);
+      setTimeout(() => setCopyPostId(null), 3000); // Reset copyPostId after 3 seconds
+      router.push(`/copy-lunch-idea?id=${post._id}`);
     } catch (error) {
-      console.error("Navigation to add failed", error);
+      console.error("Navigation to copy failed", error);
     }
   };
 
@@ -98,19 +87,19 @@ const LunchIdeaCard = ({ post, handleEdit, handleDelete, handleTagClick }) => {
           {/* Copy Button */}
           <div
             className="copy_btn"
-            onClick={handleCopyClick}
+            onClick={handleCopyWordClick}
             role="button"
             tabIndex={0}
             aria-label="Copy lunch idea"
-            onKeyDown={(e) => e.key === "Enter" && handleCopyClick()}
+            onKeyDown={(e) => e.key === "Enter" && handleCopyWordClick()}
           >
             <Image
               src={
-                copiedId === post._id
+                copyWordId === post._id
                   ? "/assets/icons/tick.svg"
                   : "/assets/icons/copy.svg"
               }
-              alt={copiedId === post._id ? "tick_icon" : "copy_icon"}
+              alt={copyWordId === post._id ? "tick_icon" : "copy_icon"}
               width={20}
               height={20}
             />
@@ -118,25 +107,27 @@ const LunchIdeaCard = ({ post, handleEdit, handleDelete, handleTagClick }) => {
         </div>
 
         {/* Add Button */}
-        <div
-          lassName="copy_btn"
-          onClick={handleAddClick}
-          role="button"
-          tabIndex={0}
-          aria-label="Add lunch idea to my profile"
-          onKeyDown={(e) => e.key === "Enter" && handleAddClick}
-        >
-          <Image
-            src={
-              copiedId === post._id
-                ? "/assets/icons/tick.svg"
-                : "/assets/icons/add.svg"
-            }
-            alt={copiedId === post._id ? "tick_icon" : "copy_icon"}
-            width={20}
-            height={20}
-          />
-        </div>
+        {post.creator._id !== session?.user.id && (
+          <div
+            className="copy_btn"
+            onClick={handleCopyPostClick}
+            role="button"
+            tabIndex={0}
+            aria-label="Add lunch idea to my profile"
+            onKeyDown={(e) => e.key === "Enter" && handleCopyPostClick}
+          >
+            <Image
+              src={
+                copyPostId === post._id
+                  ? "/assets/icons/tick.svg"
+                  : "/assets/icons/add.svg"
+              }
+              alt={copyPostId === post._id ? "tick_icon" : "add_icon"}
+              width={20}
+              height={20}
+            />
+          </div>
+        )}
       </div>
 
       {/* Lunch Information */}
