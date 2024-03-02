@@ -17,9 +17,10 @@ const LunchIdeaCardList = ({ data, handleTagClick }) => {
   );
 };
 
-const Feed = ({data}) => {
+const Feed = ({ data }) => {
   // Search states
   const [searchText, setSearchText] = useState("");
+  const [searchTimeout, setSearchTimeout] = useState(null);
   const [searchedResults, setSearchedResults] = useState([]);
 
   const filterLunchIdeas = (searchtext) => {
@@ -35,15 +36,17 @@ const Feed = ({data}) => {
   };
 
   const handleSearchChange = (e) => {
-    const searchtext = e.target.value;
-    setSearchText(searchtext);
-
+    console.log("Search text:", e.target.value); // Check if search text is being set correctly
+    clearTimeout(searchTimeout);
+    setSearchText(e.target.value);
     // debounce method
-    clearTimeout(timeoutRef.current);
-    timeoutRef.current = setTimeout(() => {
-      const searchResult = filterLunchIdeas(searchtext);
-      setSearchedResults(searchResult);
-    }, 500);
+    setSearchTimeout(
+      setTimeout(() => {
+        const searchResult = filterLunchIdeas(e.target.value);
+        console.log("Search result:", searchResult); // Check the search result
+        setSearchedResults(searchResult);
+      }, 500),
+    );
   };
 
   const handleTagClick = (tagName) => {
@@ -73,7 +76,7 @@ const Feed = ({data}) => {
 
       {/* All LunchIdeas */}
       {searchText ? (
-        (console.log(searchedResults),
+        (console.log("Search results:", searchedResults),
         (
           <LunchIdeaCardList
             data={searchedResults}

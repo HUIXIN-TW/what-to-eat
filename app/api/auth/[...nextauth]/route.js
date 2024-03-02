@@ -18,6 +18,11 @@ const handler = NextAuth({
 
       // Why use _id.toString()? Because session.user.id is a string, and sessionUser._id is an ObjectId.
       session.user.id = sessionUser._id.toString();
+      if (!sessionUser) {
+        throw new Error("User not found");
+      }
+      // Convert ObjectId to string
+      session.user.id = sessionUser._id.toString();
 
       return session;
     },
