@@ -2,31 +2,16 @@
 
 import Link from "next/link";
 import Image from "next/image";
-import route from "next/router";
-import { useEffect, useState } from "react";
-import { signIn, signOut, useSession, getProviders } from "next-auth/react";
+import { useRouter } from "next/navigation";
+import { useState } from "react";
+import { signOut, useSession } from "next-auth/react";
 
 import Logo from "./Logo";
 
 const Nav = () => {
+  const router = useRouter();
   const { data: session } = useSession();
-
-  const router = route;
-
-  const [providers, setProviders] = useState(null);
   const [toggleDropdown, setToggleDropdown] = useState(false);
-
-  useEffect(() => {
-    const fetchProviders = async () => {
-      const res = await getProviders();
-      setProviders(res);
-    };
-
-    fetchProviders();
-  }, []);
-
-  // Print providers to console
-  console.log("Providers:", providers);
 
   return (
     <nav className="flex-between w-full mb-16 pt-3">
@@ -44,7 +29,7 @@ const Nav = () => {
               Sign Out
             </button>
 
-            <Link href="/profile" className="">
+            <Link href="/profile">
               <Image
                 src={session?.user.image}
                 width={30}
@@ -56,19 +41,13 @@ const Nav = () => {
           </div>
         ) : (
           <>
-            {providers &&
-              Object.values(providers).map((provider, index) => (
-                <button
-                  type="button"
-                  key={provider.name}
-                  onClick={() => {
-                    signIn(provider.id);
-                  }}
-                  className="black_btn"
-                >
-                  Sign in
-                </button>
-              ))}
+            <button
+              type="button"
+              onClick={() => router.push("/signin")}
+              className="black_btn"
+            >
+              Sign In
+            </button>
           </>
         )}
       </div>
@@ -117,19 +96,13 @@ const Nav = () => {
           </div>
         ) : (
           <>
-            {providers &&
-              Object.values(providers).map((provider, index) => (
-                <button
-                  type="button"
-                  key={providers.name}
-                  onClick={() => {
-                    signIn(provider.id);
-                  }}
-                  className="black_btn"
-                >
-                  Sign In
-                </button>
-              ))}
+            <button
+              type="button"
+              onClick={() => router.push("/signin")}
+              className="black_btn"
+            >
+              Sign In
+            </button>
           </>
         )}
       </div>

@@ -89,8 +89,24 @@
   @apply rounded-full border border-black bg-transparent py-1.5 px-5 text-black transition-all hover:bg-black hover:text-white text-center text-sm font-inter flex items-center justify-center;
 }
 
+.google_btn {
+  @apply rounded-full border border-transparent bg-gradient-to-r from-green-500 via-red-500  to-blue-500 py-1.5 px-5 text-white transition-all hover:from-blue-600 hover:to-yellow-600 text-center text-sm font-inter flex items-center justify-center;
+}
+
 .head_text {
   @apply mt-5 text-5xl font-extrabold leading-[1.15] text-black sm:text-6xl;
+}
+
+.title_text {
+  @apply mt-5 text-3xl font-extrabold leading-snug text-black sm:text-4xl;
+}
+
+.google_gradient {
+  @apply bg-gradient-to-r from-blue-500 via-red-500 to-yellow-500 bg-clip-text text-transparent;
+}
+
+.bg-google-gradient {
+  @apply bg-gradient-to-r from-blue-500 via-red-500 to-yellow-500;
 }
 
 .orange_gradient {
