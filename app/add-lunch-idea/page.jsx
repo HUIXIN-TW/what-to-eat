@@ -44,7 +44,7 @@ const AddLunchIdea = () => {
 
       // If the response is OK, redirect to the home page
       if (response.ok) {
-        router.push("/");
+        router.push("/profile");
       }
       // If there's an error, log it to the console
     } catch (error) {

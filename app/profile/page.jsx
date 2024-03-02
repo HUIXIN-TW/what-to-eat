@@ -50,7 +50,6 @@ const MyProfile = () => {
         if (response.ok) {
           // Update the state to remove the deleted post
           const filteredPosts = myPosts.filter((item) => item._id !== post._id);
-
           setMyPosts(filteredPosts);
         } else {
           console.error(
