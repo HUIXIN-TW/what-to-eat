@@ -5,7 +5,7 @@ import LunchIdeaCard from "./LunchIdeaCard";
 
 const LunchIdeaCardList = ({ data, handleTagClick }) => {
   return (
-    <div className="idea_layout">
+    <div className="mt-16 idea_layout">
       {data.map((post, index) => (
         <LunchIdeaCard
           key={post._id}
@@ -73,9 +73,7 @@ const Feed = ({ data, onRefresh }) => {
           className="search_input"
         />
       </form>
-      <button onClick={onRefresh} className="refresh_btn mt-10">
-        Refresh
-      </button>
+
       {/* All LunchIdeas */}
       {searchText ? (
         (console.log("Search results:", searchedResults),

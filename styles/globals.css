@@ -81,7 +81,6 @@
   @apply rounded-full border border-transparent py-1.5 px-5 text-sm font-inter flex items-center justify-center transition-all cursor-pointer bg-gradient-to-r from-cyan-500 to-blue-500 text-white shadow-lg hover:from-blue-500 hover:to-cyan-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-cyan-500;
 }
 
-
 .black_btn {
   @apply rounded-full border border-black bg-black py-1.5 px-5 text-white transition-all hover:bg-white hover:text-black text-center text-sm font-inter flex items-center justify-center;
 }
