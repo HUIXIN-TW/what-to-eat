@@ -3,7 +3,7 @@
     {
       "src": "/api/lunch-idea/.*",
       "headers": {
-        "Cache-Control": "no-cache"
+        "Cache-Control": "no-store"
       }
     }
   ]
