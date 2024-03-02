@@ -5,11 +5,16 @@ import { useEffect, useState } from "react";
 
 const Home = () => {
   const [allPosts, setAllPosts] = useState([]);
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState(null);
 
   useEffect(() => {
     const fetchPosts = async () => {
+      setIsLoading(true);
+      setError(null);
       try {
-        const response = await fetch("/api/lunch-idea");
+        const cacheBuster = new Date().getTime(); // Current timestamp as cache buster
+        const response = await fetch(`/api/lunch-idea?_=${cacheBuster}`);
         if (!response.ok) {
           throw new Error("Failed to fetch data");
         }
@@ -17,6 +22,9 @@ const Home = () => {
         setAllPosts(data);
       } catch (error) {
         console.error("Failed to fetch data:", error.message);
+        setError(error.message);
+      } finally {
+        setIsLoading(false);
       }
     };
 
@@ -37,7 +45,8 @@ const Home = () => {
         daily discoveries. Share your finds, savor new flavors, and transform
         your lunchtime into an exploration of taste
       </p>
-
+      {isLoading && <p>Loading...</p>}
+      {error && <p>Error: {error}</p>}
       <Feed data={allPosts} />
     </section>
   );
