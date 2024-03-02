@@ -9,11 +9,11 @@ import Profile from "@components/Profile";
 const MyProfile = () => {
   const router = useRouter();
 
-  // Access the current session data using useSession hook from next-auth
-  const { data: session } = useSession();
-
   // State to hold the user's posts
   const [myPosts, setMyPosts] = useState([]);
+
+  // Access the current session data using useSession hook from next-auth
+  const { data: session } = useSession();
 
   // Fetch the user's posts from the API when the component mounts or the user's session changes
   useEffect(() => {

@@ -1,25 +1,30 @@
 "use client";
 
-import Feed from "@components/Feed";
+import { useSession } from "next-auth/react";
 import { useEffect, useState } from "react";
 
+import Feed from "@components/Feed";
+
 const Home = () => {
-  const [allPosts, setAllPosts] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(null);
+
+  // State to hold all posts
+  const [allPosts, setAllPosts] = useState([]);
+
+  // Access the current session data using useSession hook from next-auth
+  const { data: session } = useSession();
 
   useEffect(() => {
     const fetchPosts = async () => {
       setIsLoading(true);
       setError(null);
       try {
-        const cacheBuster = new Date().getTime();
-        const response = await fetch(`/api/lunch-idea/all?_=${cacheBuster}`);
-        console.log(response);
-        if (!response.ok) {
-          throw new Error("Failed to fetch data");
-        }
+        // const cacheBuster = new Date().getTime();
+        const response = await fetch(`/api/users/${session?.user.id}`);
         const data = await response.json();
+
+        // Update the state with the fetched posts
         setAllPosts(data);
       } catch (error) {
         console.error("Failed to fetch data:", error.message);
@@ -29,8 +34,8 @@ const Home = () => {
       }
     };
 
-    fetchPosts();
-  }, []); // Empty dependency array means this effect runs once on mount
+    if (session?.user.id) fetchPosts();
+  }, [session?.user.id]); // Empty dependency array means this effect runs once on mount
 
   return (
     <section className="w-full flex-center flex-col">
@@ -49,6 +54,7 @@ const Home = () => {
       <Feed data={allPosts} />
       {isLoading && <p>Loading...</p>}
       {error && <p>Error: {error}</p>}
+      {session && <p>Sign in to see lunch ideas from CBD</p>}
     </section>
   );
 };
