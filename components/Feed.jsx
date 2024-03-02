@@ -5,7 +5,7 @@ import LunchIdeaCard from "./LunchIdeaCard";
 
 const LunchIdeaCardList = ({ data, handleTagClick }) => {
   return (
-    <div className="mt-16 idea_layout">
+    <div className="idea_layout">
       {data.map((post, index) => (
         <LunchIdeaCard
           key={post._id}
@@ -17,7 +17,7 @@ const LunchIdeaCardList = ({ data, handleTagClick }) => {
   );
 };
 
-const Feed = ({ data }) => {
+const Feed = ({ data, onRefresh }) => {
   // Search states
   const [searchText, setSearchText] = useState("");
   const [searchTimeout, setSearchTimeout] = useState(null);
@@ -73,7 +73,9 @@ const Feed = ({ data }) => {
           className="search_input"
         />
       </form>
-
+      <button onClick={onRefresh} className="refresh_btn mt-10">
+        Refresh
+      </button>
       {/* All LunchIdeas */}
       {searchText ? (
         (console.log("Search results:", searchedResults),

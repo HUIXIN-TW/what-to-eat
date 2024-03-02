@@ -1,6 +1,5 @@
 "use client";
 
-import { useSession } from "next-auth/react";
 import { useEffect, useState } from "react";
 
 import Feed from "@components/Feed";
@@ -12,30 +11,34 @@ const Home = () => {
   // State to hold all posts
   const [allPosts, setAllPosts] = useState([]);
 
-  // Access the current session data using useSession hook from next-auth
-  const { data: session } = useSession();
+  const fetchPosts = async () => {
+    setIsLoading(true);
+    setError(null);
+    try {
+      const timestamp = new Date().getTime();
+      console.log("Fetching data...");
+      const response = await fetch(`/api/lunch-idea?_=${timestamp}`);
+      const data = await response.json();
 
+      // Update the state with the fetched posts
+      setAllPosts(data);
+    } catch (error) {
+      console.error("Failed to fetch data:", error.message);
+      setError(error.message);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  // Fetch posts on initial render
   useEffect(() => {
-    const fetchPosts = async () => {
-      setIsLoading(true);
-      setError(null);
-      try {
-        // const cacheBuster = new Date().getTime();
-        const response = await fetch(`/api/users/${session?.user.id}`);
-        const data = await response.json();
+    fetchPosts();
+  }, []);
 
-        // Update the state with the fetched posts
-        setAllPosts(data);
-      } catch (error) {
-        console.error("Failed to fetch data:", error.message);
-        setError(error.message);
-      } finally {
-        setIsLoading(false);
-      }
-    };
-
-    if (session?.user.id) fetchPosts();
-  }, [session?.user.id]); // Empty dependency array means this effect runs once on mount
+  // Function to refresh data
+  const refreshData = () => {
+    fetchPosts();
+  };
 
   return (
     <section className="w-full flex-center flex-col">
@@ -51,10 +54,9 @@ const Home = () => {
         daily discoveries. Share your finds, savor new flavors, and transform
         your lunchtime into an exploration of taste
       </p>
-      <Feed data={allPosts} />
+      <Feed data={allPosts} onRefresh={refreshData} />
       {isLoading && <p>Loading...</p>}
       {error && <p>Error: {error}</p>}
-      {session && <p>Sign in to see lunch ideas from CBD</p>}
     </section>
   );
 };
