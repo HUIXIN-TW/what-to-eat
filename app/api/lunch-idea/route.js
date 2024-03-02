@@ -11,12 +11,8 @@ export const GET = async (request) => {
 
     // Create a new Response object with lunchideas and set Cache-Control header
     const responseBody = JSON.stringify(lunchideas);
-    const headers = {
-      "Content-Type": "application/json",
-      "Cache-Control": "no-cache", // Set Cache-Control header to disable caching
-    };
 
-    return new Response(responseBody, { status: 200, headers });
+    return new Response(responseBody, { status: 200 });
   } catch (error) {
     return new Response("Failed to fetch all lunchideas", { status: 500 });
   }
