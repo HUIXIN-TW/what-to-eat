@@ -13,8 +13,9 @@ const Home = () => {
       setIsLoading(true);
       setError(null);
       try {
-        const cacheBuster = new Date().getTime(); // Current timestamp as cache buster
+        const cacheBuster = new Date().getTime();
         const response = await fetch(`/api/lunch-idea?_=${cacheBuster}`);
+        console.log(response);
         if (!response.ok) {
           throw new Error("Failed to fetch data");
         }
@@ -45,9 +46,9 @@ const Home = () => {
         daily discoveries. Share your finds, savor new flavors, and transform
         your lunchtime into an exploration of taste
       </p>
+      <Feed data={allPosts} />
       {isLoading && <p>Loading...</p>}
       {error && <p>Error: {error}</p>}
-      <Feed data={allPosts} />
     </section>
   );
 };
