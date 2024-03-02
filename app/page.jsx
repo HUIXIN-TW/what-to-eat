@@ -1,5 +1,6 @@
 "use client";
 
+import { useSession } from "next-auth/react";
 import { useEffect, useState } from "react";
 
 import Feed from "@components/Feed";
@@ -11,13 +12,21 @@ const Home = () => {
   // State to hold all posts
   const [allPosts, setAllPosts] = useState([]);
 
+  // Access the current session data using useSession hook from next-auth
+  const { data: session } = useSession();
+
   const fetchPosts = async () => {
     setIsLoading(true);
     setError(null);
     try {
-      const timestamp = new Date().getTime();
       console.log("Fetching data...");
-      const response = await fetch(`/api/lunch-idea?_=${timestamp}`);
+      console.log("session", session?.user?.id);
+      let response;
+      if (session?.user?.id) {
+        response = await fetch(`/api/users/${session.user.id}`);
+      } else {
+        response = await fetch(`/api/lunch-idea`);
+      }
       const data = await response.json();
 
       // Update the state with the fetched posts
@@ -33,12 +42,7 @@ const Home = () => {
   // Fetch posts on initial render
   useEffect(() => {
     fetchPosts();
-  }, []);
-
-  // Function to refresh data
-  const refreshData = () => {
-    fetchPosts();
-  };
+  }, [session]);
 
   return (
     <section className="w-full flex-center flex-col">
@@ -54,7 +58,7 @@ const Home = () => {
         daily discoveries. Share your finds, savor new flavors, and transform
         your lunchtime into an exploration of taste
       </p>
-      <Feed data={allPosts} onRefresh={refreshData} />
+      <Feed data={allPosts} />
       {isLoading && <p>Loading...</p>}
       {error && <p>Error: {error}</p>}
     </section>
