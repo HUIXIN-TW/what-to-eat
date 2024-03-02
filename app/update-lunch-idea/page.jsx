@@ -77,7 +77,7 @@ const UpdateLunchIdea = () => {
       });
 
       if (response.ok) {
-        router.push("/");
+        router.push("/profile");
       } else {
         // Handle server errors or validation errors
         const errorData = await response.json();
