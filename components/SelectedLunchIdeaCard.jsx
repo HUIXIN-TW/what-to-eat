@@ -4,54 +4,10 @@ import React, { useState, useEffect } from "react";
 import Image from "next/image";
 
 const SelectedLunchIdeaCard = ({ post }) => {
-  const [gradientClass, setGradientClass] = useState("");
-
-  // Function to return a random gradient class name
-  const randomGradient = () => {
-    const gradients = [
-      "orange_gradient",
-      "mint_gradient",
-      "blue_gradient",
-      "purple_gradient",
-      "red_gradient",
-      "green_gradient",
-      "sunrise_gradient",
-      "deep_sea_gradient",
-      "warm_sunset_gradient",
-      "cool_blue_gradient",
-      "lime_gradient",
-      "indigo_gradient",
-      "teal_gradient",
-    ];
-    return gradients[Math.floor(Math.random() * gradients.length)];
-  };
-
-  useEffect(() => {
-    // Update the gradient initially
-    setGradientClass(randomGradient());
-
-    // Set up an interval to update the gradient every 1 second
-    const intervalId = setInterval(() => {
-      setGradientClass(randomGradient());
-    }, 4000);
-
-    // Clean up the interval on component unmount
-    return () => clearInterval(intervalId);
-  }, []);
-
   return (
-    <div className={`idea_card ${gradientClass}`}>
+    <div className="idea_card mint_gradient">
       <div className="flex justify-between items-start gap-5">
         <div className="flex-1 flex justify-start items-center gap-3 cursor-pointer">
-          <Image
-            src="/assets/images/lunch-box-blue-yellow.webp"
-            alt="user image"
-            width={100}
-            height={100}
-            className="object-contain"
-            priority
-          />
-
           {/* Lunch Idea */}
           <div className="flex flex-col">
             <h3 className="font-satoshi font-semibold text-gray-900 text-lg">
