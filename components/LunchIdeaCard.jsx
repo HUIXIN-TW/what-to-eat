@@ -107,7 +107,7 @@ const LunchIdeaCard = ({ post, handleEdit, handleDelete, handleTagClick }) => {
         </div>
 
         {/* Add Button */}
-        {post.creator._id !== session?.user.id && (
+        {session?.user.id && post.creator._id !== session?.user.id && (
           <div
             className="copy_btn"
             onClick={handleCopyPostClick}
