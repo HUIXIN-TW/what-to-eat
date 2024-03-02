@@ -22,6 +22,7 @@ const Form = ({ type, post, setPost, submitting, handleSubmit }) => {
           </span>
 
           <input
+            id="lunchIdea"
             value={post.lunchIdea}
             onChange={(e) => setPost({ ...post, lunchIdea: e.target.value })}
             placeholder="Share a dish or a place, e.g., Avocado Toast, Mario's Deli"
@@ -35,6 +36,7 @@ const Form = ({ type, post, setPost, submitting, handleSubmit }) => {
             Cafe Name
           </span>
           <input
+            id="cafeName"
             type="text"
             value={post.cafeName}
             onChange={(e) => setPost({ ...post, cafeName: e.target.value })}

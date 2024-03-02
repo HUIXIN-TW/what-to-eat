@@ -42,6 +42,7 @@ const MyProfile = () => {
     if (hasConfirmed) {
       try {
         // Send a DELETE request to the server for the selected post
+        console.log("post._id", post._id);
         const response = await fetch(`/api/lunch-idea/${post._id.toString()}`, {
           method: "DELETE",
         });
