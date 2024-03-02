@@ -9,7 +9,14 @@ export const GET = async (request) => {
     // Fetch all lunchideas
     const lunchideas = await LunchIdea.find({}).populate("creator");
 
-    return new Response(JSON.stringify(lunchideas), { status: 200 });
+    // Create a new Response object with lunchideas and set Cache-Control header
+    const responseBody = JSON.stringify(lunchideas);
+    const headers = {
+      "Content-Type": "application/json",
+      "Cache-Control": "no-cache", // Set Cache-Control header to disable caching
+    };
+
+    return new Response(responseBody, { status: 200, headers });
   } catch (error) {
     return new Response("Failed to fetch all lunchideas", { status: 500 });
   }
