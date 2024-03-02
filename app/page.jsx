@@ -14,7 +14,7 @@ const Home = () => {
       setError(null);
       try {
         const cacheBuster = new Date().getTime();
-        const response = await fetch(`/api/lunch-idea?_=${cacheBuster}`);
+        const response = await fetch(`/api/lunch-idea/all?_=${cacheBuster}`);
         console.log(response);
         if (!response.ok) {
           throw new Error("Failed to fetch data");
