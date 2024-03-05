@@ -5,7 +5,13 @@ import SlotMachine from "./SlotMachine";
 
 const Profile = ({ name, desc, data, handleEdit, handleDelete }) => {
   const [randomPost, setRandomPost] = useState(null);
-  const [randomPostList, setRandomPostList] = useState([]);
+  const [randomPostList, setRandomPostList] = useState(null);
+  const [showSlotMachine, setShowSlotMachine] = useState(false);
+
+  // Function to toggle the visibility of SlotMachine
+  const toggleSlotMachine = () => {
+    setShowSlotMachine(!showSlotMachine);
+  };
 
   // Function to handle random selection
   const handleRandomSelection = () => {
@@ -33,12 +39,8 @@ const Profile = ({ name, desc, data, handleEdit, handleDelete }) => {
   };
 
   useEffect(() => {
-    console.log("Randomly selected post:", randomPost);
-  }, [randomPost]);
-
-  useEffect(() => {
-    console.log("Randomly selected posts:", randomPostList);
-  }, [randomPostList]);
+    handleRandomSelection();
+  }, [data]);
 
   return (
     <section className="w-full">
@@ -48,6 +50,7 @@ const Profile = ({ name, desc, data, handleEdit, handleDelete }) => {
       <p className="desc text-left">{desc}</p>
       <div className="mt-5 flex flex-col gap-5 items-center justify-center">
         {/* Button to trigger random selection */}
+        {/* 
         <div className="flex gap-5 items-center justify-center">
           <button className="outline_btn " onClick={handleRandomSelection}>
             What to Eat
@@ -57,11 +60,19 @@ const Profile = ({ name, desc, data, handleEdit, handleDelete }) => {
               Clear
             </button>
           )}
-        </div>
-
-        {/* Randomly selected lunch idea */}
+        </div> 
         {randomPost && <SelectedLunchIdeaCard post={randomPost} />}
-        {randomPostList && <SlotMachine posts={randomPostList} />}
+        */}
+
+        {/* Button to toggle SlotMachine visibility */}
+        <button className="black_btn" onClick={toggleSlotMachine}>
+          {showSlotMachine ? "Close" : "Quick Pick"}
+        </button>
+
+        {/* Conditionally render the SlotMachine component based on showSlotMachine state */}
+        {showSlotMachine && randomPostList && (
+          <SlotMachine posts={randomPostList} />
+        )}
       </div>
 
       {/* List of lunch ideas */}

@@ -9,6 +9,7 @@ const SlotMachine = ({ posts }) => {
 
   useEffect(() => {
     doorsRefs.current = doorsRefs.current.slice(0, 3);
+    init(true, 1, 2); // Initialize the slot machine, showing "?" in the box
   }, []);
 
   const spin = async () => {
@@ -35,29 +36,24 @@ const SlotMachine = ({ posts }) => {
       const boxes = door.querySelector(".boxes");
       const boxesClone = boxes.cloneNode(true); // Clone all child nodes as well
 
-      const pool = ["❓"];
+      const pool = ["☕️🍵🧃🥛🧋 What to Eat today 🍱🍣🍔🌭🥯❓"];
       if (!firstInit) {
         const arr = [];
         for (let n = 0; n < (groups > 0 ? groups : 1); n++) {
           arr.push(
             ...posts.map(
               (post) => `
-              <div class="idea_card mint_gradient">
-                <div class="flex justify-between items-start gap-5 w-full">
-                  <div class="flex-1 flex justify-start items-center gap-3 cursor-pointer">
-                    <div class="flex flex-col">
-                      <h3 class="font-satoshi font-semibold text-gray-900 text-lg">
-                        Let's EAT ${post.lunchIdea}
-                      </h3>
-                    </div>
-                  </div>
-                </div>
-            
+              <div class="idea_card mint_gradient w-full">
+                <h3 class="font-satoshi font-semibold text-gray-900 text-lg">
+                  ${post.lunchIdea}
+                </h3>
+          
                 <p class="font-inter font-semibold text-sm text-gray-700 mt-2">
                   Café: <span class="font-normal">${
                     post.cafeName || "N/A"
                   }</span>
                 </p>
+
                 <p class="font-inter font-semibold text-sm text-gray-700">
                   Walking Time: 
                   <span class="font-normal">${
@@ -121,7 +117,7 @@ const SlotMachine = ({ posts }) => {
 
   return (
     <div>
-      <div className="doors">
+      <div>
         {Array.from({ length: 1 }, (_, index) => (
           <div key={index} className="door" ref={(el) => setDoorRef(el, index)}>
             <div className="boxes"></div>
