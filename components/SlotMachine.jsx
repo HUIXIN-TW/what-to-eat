@@ -3,6 +3,7 @@
 import { useState, useEffect, useRef } from "react";
 
 const SlotMachine = ({ posts }) => {
+  console.log("posts", posts);
   const [spinning, setSpinning] = useState(false);
   const doorsRefs = useRef([]);
 

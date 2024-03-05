@@ -1,26 +1,44 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import LunchIdeaCard from "./LunchIdeaCard";
 import SelectedLunchIdeaCard from "./SelectedLunchIdeaCard";
 import SlotMachine from "./SlotMachine";
 
 const Profile = ({ name, desc, data, handleEdit, handleDelete }) => {
   const [randomPost, setRandomPost] = useState(null);
+  const [randomPostList, setRandomPostList] = useState([]);
 
+  // Function to handle random selection
   const handleRandomSelection = () => {
     if (data.length === 0) return;
 
+    // Select a single random post
+    const singleRandomIndex = Math.floor(Math.random() * data.length);
+    const singleRandomPost = data[singleRandomIndex];
+    setRandomPost(singleRandomPost);
+    console.log("singleRandomPost", singleRandomPost);
+
+    // Select 10 random posts
     const selectedPosts = [];
     for (let i = 0; i < 10; i++) {
       const randomIndex = Math.floor(Math.random() * data.length);
       selectedPosts.push(data[randomIndex]);
     }
-    setRandomPost(selectedPosts);
+    setRandomPostList(selectedPosts);
+    console.log("selectedPosts", selectedPosts);
   };
 
   // Function to clear random selection
   const handleClearRandomSelection = () => {
     setRandomPost(null);
   };
+
+  useEffect(() => {
+    console.log("Randomly selected post:", randomPost);
+  }, [randomPost]);
+
+  useEffect(() => {
+    console.log("Randomly selected posts:", randomPostList);
+  }, [randomPostList]);
 
   return (
     <section className="w-full">
@@ -31,19 +49,19 @@ const Profile = ({ name, desc, data, handleEdit, handleDelete }) => {
       <div className="mt-5 flex flex-col gap-5 items-center justify-center">
         {/* Button to trigger random selection */}
         <div className="flex gap-5 items-center justify-center">
-          <button className="outline_btn" onClick={handleRandomSelection}>
+          <button className="outline_btn " onClick={handleRandomSelection}>
             What to Eat
           </button>
           {randomPost && (
-            <button className="black_btn" onClick={handleClearRandomSelection}>
+            <button className="black_btn " onClick={handleClearRandomSelection}>
               Clear
             </button>
           )}
         </div>
 
         {/* Randomly selected lunch idea */}
-        {randomPost && <SelectedLunchIdeaCard posts={randomPost} />}
-        {randomPost && <SlotMachine posts={randomPost} />}
+        {randomPost && <SelectedLunchIdeaCard post={randomPost} />}
+        {randomPostList && <SlotMachine posts={randomPostList} />}
       </div>
 
       {/* List of lunch ideas */}
