@@ -4,15 +4,16 @@ The WhatToEat App is a web application designed to help users discover and choos
 
 ## Features
 
-- **View Lunch Options**: Explore a curated selection of lunch options effortlessly by interacting with a designated element in the user interface.
+![WhatToEat App](public/assets/demo.gif)
+
 - **User Authentication**: Access a secure login system allowing multiple users to experience tailored lunch options.
 - **Responsive Design**: Enjoy a seamless experience across devices, with design optimization for both desktop and mobile platforms.
 - **Search and Discover**: Effortlessly find your next lunch idea with a dynamic search functionality from the homepage. Choose to type in your cravings or explore using clickable tags to navigate the possibilities.
-- **Inspire and Be Inspired**: Encounter a lunch idea that resonates? Easily add it to your collection with a simple click on the "+" sign.
-- **Seamless Sharing**: Discover a lunch concept that strikes your fancy. Copy it to your clipboard with a quick click of the copy icon, making sharing a breeze.
+- **Inspire and Be Inspired**: Encounter a lunch idea that resonates? Easily add it to your collection with a simple click on the ![Add Icon](public/assets/icons/add.svg) icon.
+- **Seamless Sharing**: Discover a lunch concept that strikes your fancy. Copy it to your clipboard with a quick click of the ![Copy Icon](public/assets/icons/copy.svg) icon, making sharing a breeze.
 - **Explore User Creations**: Dive into the culinary world of others by clicking on their profile pictures. Uncover new lunch ideas and get inspired by the community.
 - **Quick Pick**: Instantly select a lunch idea from your profile or someone else’s for those days when making a choice needs to be swift.
-- **Personalize Your Contributions**: Enjoy full control over your lunch ideas with the ability to edit or delete them anytime, ensuring your contributions remain as fresh as your meals.
+- **Personalize Your Contributions**: Enjoy full control over your lunch ideas with the ability to add, edit or delete them anytime, ensuring your contributions remain as fresh as your meals.
 
 ## Technology Stack
 
