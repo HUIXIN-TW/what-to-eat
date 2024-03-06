@@ -7,18 +7,17 @@ function preprocessAndCleanTags(tagsString) {
   const separators = /[\s,]+/;
   const rawTags = tagsString
     .split(separators)
-    .filter((tag) => tag.startsWith("#")); // Ensure tag starts with "#"
-  let cleanedTags = rawTags
-    .map((tag, index) => {
-      // Use match to extract alphanumeric characters and join them back to a string
-      const matchedParts = tag.slice(1).match(/[a-zA-Z0-9]+/g);
-      if (!matchedParts) return ""; // Return empty string if no matches (avoids undefined)
-      let cleanedTag = "#" + matchedParts.join("").toLowerCase(); // Join matched parts and convert to lowercase
-      return cleanedTag;})
-    .filter((tag) => tag !== "#"); // Filter out any tags that are just "#"
-
-  // Remove duplicate tags
-  cleanedTags = [...new Set(cleanedTags)];
+    .filter((tag) => tag.startsWith("#"));
+  const cleanedTags = rawTags.map((tag) => {
+    let cleanedTag =
+      "#" +
+      tag
+        .slice(1)
+        .match(/[a-zA-Z0-9]+/g)
+        ?.join("");
+    cleanedTag = cleanedTag.toLowerCase();
+    return cleanedTag;
+  });
 
   return cleanedTags;
 }
