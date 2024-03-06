@@ -8,7 +8,7 @@ function preprocessAndCleanTags(tagsString) {
   const rawTags = tagsString
     .split(separators)
     .filter((tag) => tag.startsWith("#")); // Ensure tag starts with "#"
-  const cleanedTags = rawTags
+  let cleanedTags = rawTags
     .map((tag, index) => {
       // Use match to extract alphanumeric characters and join them back to a string
       const matchedParts = tag.slice(1).match(/[a-zA-Z0-9]+/g);
