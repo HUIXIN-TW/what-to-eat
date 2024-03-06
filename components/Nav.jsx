@@ -7,6 +7,7 @@ import { useState } from "react";
 import { signOut, useSession } from "next-auth/react";
 
 import Logo from "./Logo";
+import GitHubButton from "./GitHubButton";
 
 const Nav = () => {
   const router = useRouter();
@@ -16,7 +17,6 @@ const Nav = () => {
   return (
     <nav className="flex-between w-full mb-16 pt-3">
       <Logo />
-
       {/* Desktop Nav */}
       <div className="sm:flex hidden">
         {session?.user ? (
@@ -38,17 +38,19 @@ const Nav = () => {
                 alt="profile"
               />
             </Link>
+            <GitHubButton />
           </div>
         ) : (
-          <>
+          <div className="flex">
             <button
               type="button"
               onClick={() => router.push("/signin")}
-              className="black_btn"
+              className="black_btn mr-5"
             >
               Sign In
             </button>
-          </>
+            <GitHubButton text="Documentation" />
+          </div>
         )}
       </div>
 
@@ -64,6 +66,7 @@ const Nav = () => {
               alt="profile"
               onClick={() => setToggleDropdown(!toggleDropdown)}
             />
+
             {toggleDropdown && (
               <div className="dropdown">
                 <Link
@@ -80,6 +83,7 @@ const Nav = () => {
                 >
                   Add Lunch Idea
                 </Link>
+
                 <button
                   className="mt-5 w-full black_btn"
                   type="button"
@@ -91,19 +95,21 @@ const Nav = () => {
                 >
                   Sign Out
                 </button>
+                <GitHubButton text="Documentation" />
               </div>
             )}
           </div>
         ) : (
-          <>
+          <div className="flex">
             <button
               type="button"
               onClick={() => router.push("/signin")}
-              className="black_btn"
+              className="black_btn mr-5"
             >
               Sign In
             </button>
-          </>
+            <GitHubButton />
+          </div>
         )}
       </div>
     </nav>

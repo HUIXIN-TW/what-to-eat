@@ -93,6 +93,12 @@ const SignIn = () => {
                 autoComplete="current-password"
               />
             </div>
+            <div>
+              <p>
+                New users: Please sign in with Google to access your account.
+              </p>
+            </div>
+
             <button type="submit" className="w-full py-2 px-4 black_btn">
               Login
             </button>

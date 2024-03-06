@@ -4,7 +4,7 @@ The WhatToEat App is a web application designed to help users discover and choos
 
 ## Features
 
-![WhatToEat App](public/assets/demo.gif)
+![WhatToEat App](https://youtu.be/xVK-zeScOwU)
 
 - **User Authentication**: Access a secure login system allowing multiple users to experience tailored lunch options.
 - **Responsive Design**: Enjoy a seamless experience across devices, with design optimization for both desktop and mobile platforms.
@@ -77,7 +77,3 @@ Navigate to `http://localhost:3000` in your browser to see the app running.
 ## Contributing
 
 Contributions are welcome! Please feel free to submit a pull request or open an issue for any bugs or feature requests.
-
-## License
-
-This project is licensed under the MIT License - see the LICENSE file for details.
