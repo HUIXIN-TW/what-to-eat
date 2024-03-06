@@ -4,7 +4,7 @@ The WhatToEat App is a web application designed to help users discover and choos
 
 ## Features
 
-![WhatToEat App](https://youtu.be/xVK-zeScOwU)
+[![WhatToEat App Demo](public/assets/images/demo.png)](https://youtu.be/xVK-zeScOwU)
 
 - **User Authentication**: Access a secure login system allowing multiple users to experience tailored lunch options.
 - **Responsive Design**: Enjoy a seamless experience across devices, with design optimization for both desktop and mobile platforms.
