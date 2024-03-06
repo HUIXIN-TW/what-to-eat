@@ -36,7 +36,7 @@ const SlotMachine = ({ posts }) => {
       const boxes = door.querySelector(".boxes");
       const boxesClone = boxes.cloneNode(true); // Clone all child nodes as well
 
-      const pool = ["☕️🍵🧃🥛🧋 What to Eat today 🍱🍣🍔🌭🥯❓"];
+      const pool = ["☕️🍵🧃🥛🧋🍱🍣🍔🌭🥯❓"];
       if (!firstInit) {
         const arr = [];
         for (let n = 0; n < (groups > 0 ? groups : 1); n++) {
