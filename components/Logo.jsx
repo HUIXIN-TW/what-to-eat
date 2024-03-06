@@ -9,7 +9,7 @@ const Logo = () => {
       <div className="sm:flex hidden">
         <Link href="/" className="flex gap-2 flex-center">
           <Image
-            src="/assets/icons/what-to-eat.webp"
+            src="/assets/images/lunch-box-blue-yellow.webp"
             alt="what-to-eat-logo"
             width={100}
             height={100}
@@ -21,7 +21,7 @@ const Logo = () => {
       <div className="sm:hidden flex relative">
         <Link href="/" className="flex gap-2 flex-center">
           <Image
-            src="/assets/icons/what-to-eat.webp"
+            src="/assets/images/lunch-box-blue-yellow.webp"
             alt="what-to-eat-logo"
             width={30}
             height={30}
