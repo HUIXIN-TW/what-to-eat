@@ -1,6 +1,38 @@
 import LunchIdea from "@models/lunchidea";
 import { connectToDatabase } from "@utils/database";
 
+function preprocessAndCleanTags(tags) {
+  let tagsString = tags.toString();
+
+  // Split by whitespace or commas
+  const separators = /[\s,]+/;
+  const rawTags = tagsString
+    .split(separators)
+    .filter((tag) => tag.startsWith("#"));
+
+  const cleanedTags = rawTags.map((tag) => {
+    // Remove initial '#' for cleaning
+    let tagBody = tag.slice(1);
+
+    // Remove any character that is not a letter, number, or Chinese character
+    // This regex includes:
+    // - \u3400-\u4DBF: CJK Unified Ideographs Extension A
+    // - \u4E00-\u9FFF: CJK Unified Ideographs
+    // - \uF900-\uFAFF: CJK Compatibility Ideographs
+    // - Plus letters and numbers
+    // If you need to include more ranges, add them here.
+    let cleanedTagBody = tagBody.replace(
+      /[^\w\u3400-\u4DBF\u4E00-\u9FFF\uF900-\uFAFF]+/gu,
+      "",
+    );
+
+    // Re-add '#' and convert to lowercase
+    return "#" + cleanedTagBody.toLowerCase();
+  });
+
+  return cleanedTags;
+}
+
 /**
  * Handles the GET request to fetch a specific LunchIdea by ID.
  *
@@ -33,31 +65,51 @@ export const GET = async (request, { params }) => {
  * @returns {Response} The response object with a success or error message.
  */
 export const PATCH = async (request, { params }) => {
-  // Destructure the properties from the request's JSON body
-  const { lunchIdea, cafeName, walkingTime, tags } = await request.json();
-
   try {
     await connectToDatabase();
+    // Destructure the properties from the request's JSON body
+    const { lunchIdea, cafeName, walkingTime, tags } = await request.json();
 
     // Find the existing lunchIdea by ID
     const existingLunchIdea = await LunchIdea.findById(params.id);
 
     // If no lunch idea is found, return a 404 response
     if (!existingLunchIdea) {
-      return new Response("LunchIdea not found", { status: 404 });
+      return new Response(JSON.stringify({ message: "LunchIdea not found" }), {
+        status: 404,
+        headers: { "Content-Type": "application/json" },
+      });
     }
+
+    const cleanedTags = preprocessAndCleanTags(tags);
 
     // Update the lunchIdea with new data
     existingLunchIdea.lunchIdea = lunchIdea;
-    existingLunchIdea.tags = tags;
+    existingLunchIdea.tags = cleanedTags;
     existingLunchIdea.cafeName = cafeName;
     existingLunchIdea.walkingTime = walkingTime;
 
     await existingLunchIdea.save();
 
-    return new Response("Successfully updated the LunchIdeas", { status: 200 });
+    return new Response(
+      JSON.stringify({ message: "Successfully updated the LunchIdeas" }),
+      {
+        status: 200,
+        headers: {
+          "Content-Type": "application/json",
+        },
+      },
+    );
   } catch (error) {
-    return new Response("Error Updating LunchIdea", { status: 500 });
+    return new Response(
+      JSON.stringify({ message: "Error Updating LunchIdea: " + error.message }),
+      {
+        status: 500,
+        headers: {
+          "Content-Type": "application/json",
+        },
+      },
+    );
   }
 };
 

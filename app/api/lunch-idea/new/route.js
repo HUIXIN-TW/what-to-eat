@@ -1,22 +1,31 @@
 import LunchIdea from "@models/lunchidea";
 import { connectToDatabase } from "@utils/database";
 
-// Function to preprocess, split, and clean tags
 function preprocessAndCleanTags(tagsString) {
-  // Assuming tags are submitted as a single string, e.g., "#coffee #vegan"
+  // Split by whitespace or commas
   const separators = /[\s,]+/;
   const rawTags = tagsString
     .split(separators)
     .filter((tag) => tag.startsWith("#"));
+
   const cleanedTags = rawTags.map((tag) => {
-    let cleanedTag =
-      "#" +
-      tag
-        .slice(1)
-        .match(/[a-zA-Z0-9]+/g)
-        ?.join("");
-    cleanedTag = cleanedTag.toLowerCase();
-    return cleanedTag;
+    // Remove initial '#' for cleaning
+    let tagBody = tag.slice(1);
+
+    // Remove any character that is not a letter, number, or Chinese character
+    // This regex includes:
+    // - \u3400-\u4DBF: CJK Unified Ideographs Extension A
+    // - \u4E00-\u9FFF: CJK Unified Ideographs
+    // - \uF900-\uFAFF: CJK Compatibility Ideographs
+    // - Plus letters and numbers
+    // If you need to include more ranges, add them here.
+    let cleanedTagBody = tagBody.replace(
+      /[^\w\u3400-\u4DBF\u4E00-\u9FFF\uF900-\uFAFF]+/gu,
+      "",
+    );
+
+    // Re-add '#' and convert to lowercase
+    return "#" + cleanedTagBody.toLowerCase();
   });
 
   return cleanedTags;
