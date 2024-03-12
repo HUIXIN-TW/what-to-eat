@@ -22,7 +22,7 @@ function preprocessAndCleanTags(tags) {
     // - Plus letters and numbers
     // If you need to include more ranges, add them here.
     let cleanedTagBody = tagBody.replace(
-      /[^\w\u3400-\u4DBF\u4E00-\u9FFF\uF900-\uFAFF]+/gu,
+      /[^\w\u3400-\u4DBF\u4E00-\u9FFF\uF900-\uFAFF\-]+/gu,
       "",
     );
 
