@@ -237,7 +237,7 @@
   width: 95vw;
   height: 95vh;
   min-width: 75px;
-  min-height: 100px;
+  min-height: 225px;
   max-width: 500px;
   max-height: 150px;
   border-radius: 1ex;
@@ -253,7 +253,7 @@
   width: 95vw;
   height: 95vh;
   min-width: 75px;
-  min-height: 100px;
+  min-height: 225px;
   max-width: 500px;
   max-height: 150px;
   display: flex;

@@ -10,9 +10,21 @@ const LunchIdeaSchema = new Schema({
     type: String,
     required: [true, "Lunch idea is required."],
   },
+  lunchBudget: {
+    type: String,
+    required: [true, "Lunch budget is required."],
+  },
   cafeName: {
     type: String,
     required: [true, "Cafe name is required."],
+  },
+  cafeLocation: {
+    type: String,
+    required: [true, "Cafe location is required."],
+  },
+  cafeWebsite: {
+    type: String,
+    required: [true, "Cafe website is required."],
   },
   walkingTime: {
     type: String,

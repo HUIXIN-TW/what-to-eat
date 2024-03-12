@@ -32,6 +32,20 @@ const Form = ({ type, post, setPost, submitting, handleSubmit }) => {
         </label>
 
         <label>
+          <span className="font-satoshi font-semibold text-base text-gray-700">
+            Expected Lunch Spend
+          </span>
+          <input
+            id="lunchBudget"
+            value={post.lunchBudget}
+            onChange={(e) => setPost({ ...post, lunchBudget: e.target.value })}
+            placeholder="optoinal"
+            required
+            className="form_input"
+          />
+        </label>
+
+        <label>
           <span className="font-semibold text-base text-gray-700">
             Cafe Name
           </span>
@@ -42,6 +56,32 @@ const Form = ({ type, post, setPost, submitting, handleSubmit }) => {
             onChange={(e) => setPost({ ...post, cafeName: e.target.value })}
             placeholder="e.g., Hemingway Cafe, Offshoot Coffee"
             required
+            className="form_input"
+          />
+        </label>
+
+        <label>
+          <span className="font-semibold text-base text-gray-700">
+            Cafe Location
+          </span>
+          <input
+            id="cafeLocation"
+            type="text"
+            value={post.cafeLocation}
+            onChange={(e) => setPost({ ...post, cafeLocation: e.target.value })}
+            placeholder="optional"
+            className="form_input"
+          />
+        </label>
+
+        <label>
+          <span className="font-semibold text-base text-gray-700">URL</span>
+          <input
+            id="cafeWebsite"
+            type="text"
+            value={post.cafeWebsite}
+            onChange={(e) => setPost({ ...post, cafeWebsite: e.target.value })}
+            placeholder="optionl"
             className="form_input"
           />
         </label>
@@ -83,7 +123,7 @@ const Form = ({ type, post, setPost, submitting, handleSubmit }) => {
             value={post.tags}
             onChange={(e) => setPost({ ...post, tags: e.target.value })}
             type="text"
-            placeholder="Type # and tag name, press space to add"
+            placeholder="Type # and tag name, press space to add tags"
             required
             className="form_input"
           />

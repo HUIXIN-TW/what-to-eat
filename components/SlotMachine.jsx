@@ -47,20 +47,32 @@ const SlotMachine = ({ posts }) => {
                 <h3 class="font-satoshi font-semibold text-gray-900 text-lg">
                   ${post.lunchIdea}
                 </h3>
-          
                 <p class="font-inter font-semibold text-sm text-gray-700 mt-2">
-                  Café: <span class="font-normal">${
-                    post.cafeName || "N/A"
+                  Budget: <span class="font-normal">${
+                    post.lunchBudget || "N/A"
                   }</span>
-                </p>
-
-                <p class="font-inter font-semibold text-sm text-gray-700">
+                  <p class="font-inter font-semibold text-sm text-gray-700">
                   Walking Time: 
                   <span class="font-normal">${
                     post.walkingTime ? `${post.walkingTime} mins` : "N/A"
                   }</span>
                 </p>
-            
+                <p class="font-inter font-semibold text-sm text-gray-700 mt-2">
+                  Café: <span class="font-normal">${
+                    post.cafeName || "N/A"
+                  }</span>
+                </p>
+                <p class="font-inter font-semibold text-sm text-gray-700">
+                  Location: <span class="font-normal">${
+                    post.cafeLocation || "N/A"
+                  }</span>
+                </p>
+                <p class="font-inter font-semibold text-sm text-gray-700">
+                  URL: <span class="font-normal">${
+                    post.cafeWebsite || "N/A"
+                  }</span>
+                </p>
+
                 <div class="mt-2 flex flex-wrap gap-2">
                   ${post.tags
                     .map(

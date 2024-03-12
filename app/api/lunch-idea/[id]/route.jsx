@@ -68,7 +68,15 @@ export const PATCH = async (request, { params }) => {
   try {
     await connectToDatabase();
     // Destructure the properties from the request's JSON body
-    const { lunchIdea, cafeName, walkingTime, tags } = await request.json();
+    const {
+      lunchIdea,
+      lunchBudget,
+      cafeName,
+      cafeLocation,
+      cafeWebsite,
+      walkingTime,
+      tags,
+    } = await request.json();
 
     // Find the existing lunchIdea by ID
     const existingLunchIdea = await LunchIdea.findById(params.id);
@@ -85,8 +93,11 @@ export const PATCH = async (request, { params }) => {
 
     // Update the lunchIdea with new data
     existingLunchIdea.lunchIdea = lunchIdea;
+    existingLunchIdea.lunchBudget = lunchBudget;
     existingLunchIdea.tags = cleanedTags;
     existingLunchIdea.cafeName = cafeName;
+    existingLunchIdea.cafeLocation = cafeLocation;
+    existingLunchIdea.cafeWebsite = cafeWebsite;
     existingLunchIdea.walkingTime = walkingTime;
 
     await existingLunchIdea.save();

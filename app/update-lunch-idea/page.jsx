@@ -20,8 +20,11 @@ const UpdateLunchIdea = () => {
   const [post, setPost] = useState({
     creator: "",
     lunchIdea: "",
+    lunchBudget: "",
     tags: "",
     cafeName: "",
+    cafeLocation: "",
+    cafeWebsite: "",
     walkingTime: "",
   });
 
@@ -36,8 +39,11 @@ const UpdateLunchIdea = () => {
       setPost({
         creator: data.creator._id,
         cafeName: data.cafeName,
+        cafeLocation: data.cafeLocation,
+        cafeWebsite: data.cafeWebsite,
         walkingTime: data.walkingTime,
         lunchIdea: data.lunchIdea,
+        lunchBudget: data.lunchBudget,
         tags: data.tags,
       });
     };
@@ -70,7 +76,10 @@ const UpdateLunchIdea = () => {
         },
         body: JSON.stringify({
           lunchIdea: post.lunchIdea,
+          lunchBudget: post.lunchBudget,
           cafeName: post.cafeName,
+          cafeLocation: post.cafeLocation,
+          cafeWebsite: post.cafeWebsite,
           walkingTime: post.walkingTime,
           tags: post.tags,
         }),
