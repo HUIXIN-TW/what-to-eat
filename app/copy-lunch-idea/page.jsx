@@ -19,8 +19,11 @@ const CopyLunchIdea = () => {
   // State for storing the prompt details
   const [post, setPost] = useState({
     lunchIdea: "",
+    lunchBudget: "",
     tags: "",
     cafeName: "",
+    cafeLocation: "",
+    cafeWebsite: "",
     walkingTime: "",
   });
 
@@ -34,8 +37,11 @@ const CopyLunchIdea = () => {
       // Setting the fetched prompt details to the post state
       setPost({
         cafeName: data.cafeName,
+        cafeLocation: data.cafeLocation,
+        cafeWebsite: data.cafeWebsite,
         walkingTime: data.walkingTime,
         lunchIdea: data.lunchIdea,
+        lunchBudget: data.lunchBudget,
         tags: data.tags,
       });
     };
@@ -64,8 +70,11 @@ const CopyLunchIdea = () => {
         },
         body: JSON.stringify({
           lunchIdea: post.lunchIdea.toString(),
+          lunchBudget: post.lunchBudget.toString(),
           userId: session?.user.id,
           cafeName: post.cafeName.toString(),
+          cafeLocation: post.cafeLocation.toString(),
+          cafeWebsite: post.cafeWebsite.toString(),
           walkingTime: post.walkingTime.toString(),
           tags: post.tags.toString(),
         }),

@@ -14,8 +14,11 @@ const AddLunchIdea = () => {
   // Initially, set post state to empty values
   const [post, setPost] = useState({
     lunchIdea: "",
+    lunchBudget: "",
     tags: "",
     cafeName: "",
+    cafeLocation: "",
+    cafeWebsite: "",
     walkingTime: "",
   });
 
@@ -35,8 +38,11 @@ const AddLunchIdea = () => {
         },
         body: JSON.stringify({
           lunchIdea: post.lunchIdea,
+          lunchBudget: post.lunchBudget,
           userId: session?.user.id,
           cafeName: post.cafeName,
+          cafeLocation: post.cafeLocation,
+          cafeWebsite: post.cafeWebsite,
           tags: post.tags,
           walkingTime: post.walkingTime,
         }),

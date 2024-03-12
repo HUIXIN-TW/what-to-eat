@@ -40,8 +40,11 @@ export const POST = async (request) => {
   const {
     userId,
     lunchIdea,
+    lunchBudget,
     tags: tagsString,
     cafeName,
+    cafeLocation,
+    cafeWebsite,
     walkingTime,
   } = await request.json();
 
@@ -64,8 +67,11 @@ export const POST = async (request) => {
     const newLunchIdea = new LunchIdea({
       creator: userId,
       lunchIdea: capitalizeEachWord(lunchIdea.trim()),
+      lunchBudget,
       tags: cleanedTags,
       cafeName: capitalizeEachWord(cafeName.trim()),
+      cafeLocation,
+      cafeWebsite,
       walkingTime,
     });
     await newLunchIdea.save();

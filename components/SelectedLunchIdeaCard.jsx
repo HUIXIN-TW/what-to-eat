@@ -19,13 +19,23 @@ const SelectedLunchIdeaCard = ({ post }) => {
 
       {/* Lunch Information */}
       <p className="font-inter font-semibold text-sm text-gray-700 mt-2">
-        Café: <span className="font-normal">{post.cafeName || "N/A"}</span>
+        Budget: <span className="font-normal">{post.lunchBudget || "N/A"}</span>
       </p>
       <p className="font-inter font-semibold text-sm text-gray-700">
         Walking Time:{" "}
         <span className="font-normal">
           {post.walkingTime ? `${post.walkingTime} mins` : "N/A"}
         </span>
+      </p>
+      <p className="font-inter font-semibold text-sm text-gray-700 mt-2">
+        Café: <span className="font-normal">{post.cafeName || "N/A"}</span>
+      </p>
+      <p className="font-inter font-semibold text-sm text-gray-700">
+        Location:{" "}
+        <span className="font-normal">{post.cafeLocation || "N/A"}</span>
+      </p>
+      <p className="font-inter font-semibold text-sm text-gray-700">
+        URL: <span className="font-normal">{post.cafeWebsite || "N/A"}</span>
       </p>
 
       {/* Tags Zone */}
