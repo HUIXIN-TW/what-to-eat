@@ -58,6 +58,33 @@ const LunchIdeaCard = ({ post, handleEdit, handleDelete, handleTagClick }) => {
     }
   };
 
+  // Function to open the cafe location in Google Maps
+  const handleLocationClick = () => {
+    if (post.cafeLocation) {
+      const encodedLocation = encodeURIComponent(post.cafeLocation);
+      const mapsUrl = `https://www.google.com/maps/search/?api=1&query=${encodedLocation}`;
+      window.open(mapsUrl, "_blank", "noopener,noreferrer");
+    }
+  };
+
+  // Function to open the cafe website URL
+  const handleUrlClick = () => {
+    if (
+      post.cafeWebsite &&
+      (post.cafeWebsite.startsWith("http://") ||
+        post.cafeWebsite.startsWith("https://"))
+    ) {
+      window.open(post.cafeWebsite, "_blank", "noopener,noreferrer");
+    } else if (post.cafeWebsite) {
+      // Add 'http://' prefix if missing
+      window.open(
+        `http://${post.cafeWebsite}`,
+        "_blank",
+        "noopener,noreferrer",
+      );
+    }
+  };
+
   return (
     <div className="idea_card">
       <div className="flex justify-between items-start gap-5">
@@ -143,10 +170,18 @@ const LunchIdeaCard = ({ post, handleEdit, handleDelete, handleTagClick }) => {
       </p>
       <p className="font-inter font-semibold text-sm text-gray-700">
         Location:{" "}
-        <span className="font-normal">{post.cafeLocation || "N/A"}</span>
+        <span
+          className="font-normal cursor-pointer"
+          onClick={handleLocationClick}
+        >
+          {post.cafeLocation || "N/A"}
+        </span>
       </p>
       <p className="font-inter font-semibold text-sm text-gray-700">
-        URL: <span className="font-normal">{post.cafeWebsite || "N/A"}</span>
+        URL:{" "}
+        <span className="font-normal cursor-pointer" onClick={handleUrlClick}>
+          {post.cafeWebsite || "N/A"}
+        </span>
       </p>
       <p className="font-inter text-sm text-gray-500 mt-2">
         Posted by: {post.creator.username}
