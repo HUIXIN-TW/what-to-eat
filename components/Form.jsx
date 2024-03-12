@@ -40,7 +40,6 @@ const Form = ({ type, post, setPost, submitting, handleSubmit }) => {
             value={post.lunchBudget}
             onChange={(e) => setPost({ ...post, lunchBudget: e.target.value })}
             placeholder="optoinal"
-            required
             className="form_input"
           />
         </label>
@@ -81,7 +80,7 @@ const Form = ({ type, post, setPost, submitting, handleSubmit }) => {
             type="text"
             value={post.cafeWebsite}
             onChange={(e) => setPost({ ...post, cafeWebsite: e.target.value })}
-            placeholder="optionl"
+            placeholder="optional"
             className="form_input"
           />
         </label>
