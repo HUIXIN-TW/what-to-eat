@@ -107,25 +107,25 @@ const LunchIdeaCard = ({ post, handleEdit, handleDelete, handleTagClick }) => {
         </div>
 
         {/* Add Button */}
-          <div
-            className="copy_btn"
-            onClick={handleCopyPostClick}
-            role="button"
-            tabIndex={0}
-            aria-label="Add lunch idea to my profile"
-            onKeyDown={(e) => e.key === "Enter" && handleCopyPostClick}
-          >
-            <Image
-              src={
-                copyPostId === post._id
-                  ? "/assets/icons/tick.svg"
-                  : "/assets/icons/add.svg"
-              }
-              alt={copyPostId === post._id ? "tick_icon" : "add_icon"}
-              width={20}
-              height={20}
-            />
-          </div>
+        <div
+          className="copy_btn"
+          onClick={handleCopyPostClick}
+          role="button"
+          tabIndex={0}
+          aria-label="Add lunch idea to my profile"
+          onKeyDown={(e) => e.key === "Enter" && handleCopyPostClick}
+        >
+          <Image
+            src={
+              copyPostId === post._id
+                ? "/assets/icons/tick.svg"
+                : "/assets/icons/add.svg"
+            }
+            alt={copyPostId === post._id ? "tick_icon" : "add_icon"}
+            width={20}
+            height={20}
+          />
+        </div>
       </div>
 
       {/* Lunch Information */}
