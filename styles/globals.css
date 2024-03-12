@@ -236,8 +236,8 @@
   box-shadow: 0 0 3px 2px rgba(0, 0, 0, 0.4) inset;
   width: 95vw;
   height: 95vh;
-  min-width: 75px;
-  min-height: 225px;
+  min-width: 65px;
+  min-height: 215px;
   max-width: 500px;
   max-height: 150px;
   border-radius: 1ex;
@@ -252,8 +252,8 @@
 .box {
   width: 95vw;
   height: 95vh;
-  min-width: 75px;
-  min-height: 225px;
+  min-width: 65px;
+  min-height: 215px;
   max-width: 500px;
   max-height: 150px;
   display: flex;
