@@ -20,7 +20,7 @@ const Home = () => {
     setError(null);
     try {
       console.log("Fetching data...");
-      console.log("session", session?.user?.id);
+      // console.log("session", session?.user?.id);
       let response;
       if (session?.user?.id) {
         response = await fetch(`/api/users/${session.user.id}`);
