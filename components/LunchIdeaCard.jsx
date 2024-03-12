@@ -87,17 +87,17 @@ const LunchIdeaCard = ({ post, handleEdit, handleDelete, handleTagClick }) => {
 
   // Function to truncate a URL to a specified length and add an ellipsis if it exceeds the length.
   const truncateUrl = (url, maxLength) => {
-    if (typeof url !== 'string' || maxLength < 3) {
+    if (typeof url !== "string" || maxLength < 3) {
       return url; // Return the original URL if it's not a string or maxLength is less than 3
     }
-  
+
     if (url.length <= maxLength) {
       return url;
     }
-  
+
     // Truncate and add ellipsis
     return `${url.substring(0, maxLength - 3)}...`;
-  }
+  };
 
   return (
     <div className="idea_card">
