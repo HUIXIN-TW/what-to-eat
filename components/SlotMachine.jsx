@@ -43,7 +43,7 @@ const SlotMachine = ({ posts }) => {
           arr.push(
             ...posts.map(
               (post) => `
-              <div class="idea_card mint_gradient w-full">
+              <div class="idea_card w-full m-1">
                 <h3 class="font-satoshi font-semibold text-gray-900 text-lg">
                   ${post.lunchIdea}
                 </h3>
@@ -62,16 +62,17 @@ const SlotMachine = ({ posts }) => {
                     post.cafeName || "N/A"
                   }</span>
                 </p>
-                <p class="font-inter font-semibold text-sm text-gray-700">
-                  Location: <span class="font-normal">${
-                    post.cafeLocation || "N/A"
-                  }</span>
-                </p>
-                <p class="font-inter font-semibold text-sm text-gray-700">
-                  URL: <span class="font-normal">${
-                    post.cafeWebsite || "N/A"
-                  }</span>
-                </p>
+                <span class="font-inter font-semibold text-sm text-gray-700">
+                <span class="font-normal cursor-pointer clickable" data-url="${encodeURIComponent(
+                  post.cafeLocation,
+                )}" data-type="location">Check the location</span>
+              </span>
+              <span class="font-inter font-semibold text-sm text-gray-700"> or</span>
+              <span class="font-inter font-semibold text-sm text-gray-700">
+                <span class="font-normal cursor-pointer clickable" data-url="${
+                  post.cafeWebsite
+                }" data-type="url">Visit their webite</span>
+              </span>
 
                 <div class="mt-2 flex flex-wrap gap-2">
                   ${post.tags
@@ -111,6 +112,21 @@ const SlotMachine = ({ posts }) => {
         door.clientHeight * (pool.length - 1)
       }px)`;
       door.replaceChild(boxesClone, boxes);
+
+      boxesClone.querySelectorAll(".clickable").forEach((element) => {
+        element.addEventListener("click", () => {
+          const type = element.getAttribute("data-type");
+          const url = element.getAttribute("data-url");
+          if (type === "url") {
+            // Assuming URLs are already fully qualified
+            window.open(url, "_blank", "noopener,noreferrer");
+          } else if (type === "location") {
+            // For location, we encode it for use in a Google Maps search URL
+            const mapsUrl = `https://www.google.com/maps/search/?api=1&query=${url}`;
+            window.open(mapsUrl, "_blank", "noopener,noreferrer");
+          }
+        });
+      });
     });
   };
 
