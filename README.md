@@ -83,42 +83,55 @@ Navigate to `http://localhost:3000` in your browser to see the app running.
 
 This project is a dynamic Next.js app. It uses NextAuth, MongoDB, and route handlers, so it should be deployed to **Cloudflare Workers with the OpenNext adapter**, not as a static export.
 
-Suggested migration path:
+Recommended deploy flow:
 
-1. Keep the current app stable locally first.
-2. Install the Cloudflare runtime dependencies:
+1. Verify Cloudflare login first:
 
 ```bash
-npm install
+npm run whoami
 ```
 
-3. Create a local `.dev.vars` file from `.dev.vars.example` when you want to preview the Worker locally.
-4. Use the new scripts:
+2. Sync core secrets from `.env.local`:
 
 ```bash
-npm run preview
+npm run cf:sync-secrets
+```
+
+This syncs:
+- `MONGODB_URI`
+- `GOOGLE_ID`
+- `GOOGLE_CLIENT_SECRET`
+- `NEXTAUTH_SECRET`
+
+3. Deploy:
+
+```bash
 npm run deploy
 ```
 
-5. Add Cloudflare runtime secrets for:
-   - `MONGODB_URI`
-   - `GOOGLE_ID`
-   - `GOOGLE_CLIENT_SECRET`
-   - `NEXTAUTH_SECRET`
-   - `NEXTAUTH_URL`
-6. Keep the Cloudflare-side variables after deploys:
+4. After deploy, set runtime `NEXTAUTH_URL` to your deployed domain:
 
 ```bash
-npm run deploy -- --keep-vars
+npm run cf:sync-secrets -- --nextauth-url https://<your-worker-domain>.workers.dev
 ```
 
-7. Update the Google OAuth allowed redirect URI to match the deployed domain:
+5. Update Google OAuth allowed redirect URI:
 
 ```text
 https://<your-worker-domain>/api/auth/callback/google
 ```
 
-8. Deploy to Workers after validating auth and MongoDB connectivity end to end.
+6. Validate auth and MongoDB end to end on the Worker domain.
+
+Secret sync script:
+
+- File: `tool/sync_secret.py`
+- Default env file: `.env.local`
+- Optional custom env file:
+
+```bash
+npm run cf:sync-secrets -- --env-file .env
+```
 
 Important notes:
 
@@ -126,6 +139,7 @@ Important notes:
 - Static Pages export is only appropriate for fully static Next.js sites.
 - Because this app uses `mongoose`, you should verify the MongoDB path in the Workers runtime before switching production traffic.
 - `.dev.vars` and `.env` files should stay local. Production runtime values belong in Cloudflare secrets or environment variables.
+- Workers static assets have a 25 MiB single-file limit. Keep large videos outside `public/` (use R2 or an external CDN URL).
 
 References:
 
