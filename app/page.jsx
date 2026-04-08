@@ -1,9 +1,11 @@
 "use client";
 
-import { useSession } from "next-auth/react";
 import { useEffect, useState } from "react";
 
 import Feed from "@components/Feed";
+
+const PUBLIC_FEED_ERROR_MESSAGE =
+  "Lunch ideas are temporarily unavailable. Please try again shortly.";
 
 const Home = () => {
   const [isLoading, setIsLoading] = useState(false);
@@ -12,33 +14,39 @@ const Home = () => {
   // State to hold all posts
   const [allPosts, setAllPosts] = useState([]);
 
-  // Access the current session data using useSession hook from next-auth
-  const { data: session } = useSession();
-
   // Fetch posts on initial render
   useEffect(() => {
     const fetchPosts = async () => {
       setIsLoading(true);
       setError(null);
       try {
-        console.log("Fetching data...");
-        const response = session?.user?.id
-          ? await fetch(`/api/users/${session.user.id}`)
-          : await fetch("/api/lunch-idea");
+        const response = await fetch("/api/lunch-idea", { cache: "no-store" });
+        const contentType = response.headers.get("content-type") || "";
+
+        if (!contentType.includes("application/json")) {
+          const message = await response.text();
+          throw new Error(message || "Failed to fetch lunch ideas");
+        }
+
         const data = await response.json();
 
+        if (!response.ok) {
+          throw new Error(data?.error || "Failed to fetch lunch ideas");
+        }
+
         // Update the state with the fetched posts
-        setAllPosts(data);
+        setAllPosts(Array.isArray(data) ? data : []);
       } catch (error) {
         console.error("Failed to fetch data:", error.message);
-        setError(error.message);
+        setAllPosts([]);
+        setError(PUBLIC_FEED_ERROR_MESSAGE);
       } finally {
         setIsLoading(false);
       }
     };
 
     fetchPosts();
-  }, [session?.user?.id]);
+  }, []);
 
   return (
     <section className="w-full flex-center flex-col">
@@ -56,7 +64,7 @@ const Home = () => {
       </p>
       <Feed data={allPosts} />
       {isLoading && <p>Loading...</p>}
-      {error && <p>Error: {error}</p>}
+      {error && !isLoading && <p className="desc text-center mt-8">{error}</p>}
     </section>
   );
 };

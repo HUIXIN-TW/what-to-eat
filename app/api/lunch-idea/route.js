@@ -9,8 +9,13 @@ export const GET = async (request) => {
     // Fetch all lunchideas
     const lunchideas = await LunchIdea.find({}).populate("creator");
 
-    return new Response(JSON.stringify(lunchideas), { status: 200 });
+    return Response.json(lunchideas, { status: 200 });
   } catch (error) {
-    return new Response("Failed to fetch all lunchideas", { status: 500 });
+    console.error("Failed to fetch all lunchideas", error);
+
+    return Response.json(
+      { error: "Failed to fetch all lunchideas" },
+      { status: 500 },
+    );
   }
 };
