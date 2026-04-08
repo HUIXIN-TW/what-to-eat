@@ -98,6 +98,7 @@ npm run cf:sync-secrets
 ```
 
 This syncs:
+
 - `MONGODB_URI`
 - `GOOGLE_ID`
 - `GOOGLE_CLIENT_SECRET`
