@@ -8,6 +8,10 @@ export const connectToDatabase = async () => {
     return;
   }
 
+  if (!process.env.MONGODB_URI) {
+    throw new Error("Missing MONGODB_URI");
+  }
+
   try {
     await mongoose.connect(process.env.MONGODB_URI, {
       dbName: "what-to-eat",
@@ -18,5 +22,6 @@ export const connectToDatabase = async () => {
     console.log("MongoDB connected");
   } catch (error) {
     console.log(error);
+    throw error;
   }
 };

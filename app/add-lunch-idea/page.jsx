@@ -39,7 +39,6 @@ const AddLunchIdea = () => {
         body: JSON.stringify({
           lunchIdea: post.lunchIdea,
           lunchBudget: post.lunchBudget,
-          userId: session?.user.id,
           cafeName: post.cafeName,
           cafeLocation: post.cafeLocation,
           cafeWebsite: post.cafeWebsite,

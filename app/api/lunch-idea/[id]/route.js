@@ -1,37 +1,9 @@
+import { getServerSession } from "next-auth";
+
 import LunchIdea from "@models/lunchidea";
+import { authOptions } from "@utils/auth";
 import { connectToDatabase } from "@utils/database";
-
-function preprocessAndCleanTags(tags) {
-  let tagsString = tags.toString();
-
-  // Split by whitespace or commas
-  const separators = /[\s,]+/;
-  const rawTags = tagsString
-    .split(separators)
-    .filter((tag) => tag.startsWith("#"));
-
-  const cleanedTags = rawTags.map((tag) => {
-    // Remove initial '#' for cleaning
-    let tagBody = tag.slice(1);
-
-    // Remove any character that is not a letter, number, or Chinese character
-    // This regex includes:
-    // - \u3400-\u4DBF: CJK Unified Ideographs Extension A
-    // - \u4E00-\u9FFF: CJK Unified Ideographs
-    // - \uF900-\uFAFF: CJK Compatibility Ideographs
-    // - Plus letters and numbers
-    // If you need to include more ranges, add them here.
-    let cleanedTagBody = tagBody.replace(
-      /[^\w\u3400-\u4DBF\u4E00-\u9FFF\uF900-\uFAFF\-]+/gu,
-      "",
-    );
-
-    // Re-add '#' and convert to lowercase
-    return "#" + cleanedTagBody.toLowerCase();
-  });
-
-  return cleanedTags;
-}
+import { validateLunchIdeaPayload } from "@utils/lunchidea";
 
 /**
  * Handles the GET request to fetch a specific LunchIdea by ID.
@@ -66,22 +38,28 @@ export const GET = async (request, { params }) => {
  */
 export const PATCH = async (request, { params }) => {
   try {
-    await connectToDatabase();
-    // Destructure the properties from the request's JSON body
-    const {
-      lunchIdea,
-      lunchBudget,
-      cafeName,
-      cafeLocation,
-      cafeWebsite,
-      walkingTime,
-      tags,
-    } = await request.json();
+    const session = await getServerSession(authOptions);
 
-    // Find the existing lunchIdea by ID
+    if (!session?.user?.id) {
+      return new Response(JSON.stringify({ message: "Authentication required" }), {
+        status: 401,
+        headers: { "Content-Type": "application/json" },
+      });
+    }
+
+    await connectToDatabase();
+    const payload = await request.json();
+    const { data, errors } = validateLunchIdeaPayload(payload);
+
+    if (errors.length > 0) {
+      return new Response(JSON.stringify({ message: "Validation failed", errors }), {
+        status: 400,
+        headers: { "Content-Type": "application/json" },
+      });
+    }
+
     const existingLunchIdea = await LunchIdea.findById(params.id);
 
-    // If no lunch idea is found, return a 404 response
     if (!existingLunchIdea) {
       return new Response(JSON.stringify({ message: "LunchIdea not found" }), {
         status: 404,
@@ -89,16 +67,20 @@ export const PATCH = async (request, { params }) => {
       });
     }
 
-    const cleanedTags = preprocessAndCleanTags(tags);
+    if (existingLunchIdea.creator.toString() !== session.user.id) {
+      return new Response(JSON.stringify({ message: "Forbidden" }), {
+        status: 403,
+        headers: { "Content-Type": "application/json" },
+      });
+    }
 
-    // Update the lunchIdea with new data
-    existingLunchIdea.lunchIdea = lunchIdea;
-    existingLunchIdea.lunchBudget = lunchBudget;
-    existingLunchIdea.tags = cleanedTags;
-    existingLunchIdea.cafeName = cafeName;
-    existingLunchIdea.cafeLocation = cafeLocation;
-    existingLunchIdea.cafeWebsite = cafeWebsite;
-    existingLunchIdea.walkingTime = walkingTime;
+    existingLunchIdea.lunchIdea = data.lunchIdea;
+    existingLunchIdea.lunchBudget = data.lunchBudget;
+    existingLunchIdea.tags = data.tags;
+    existingLunchIdea.cafeName = data.cafeName;
+    existingLunchIdea.cafeLocation = data.cafeLocation;
+    existingLunchIdea.cafeWebsite = data.cafeWebsite;
+    existingLunchIdea.walkingTime = data.walkingTime;
 
     await existingLunchIdea.save();
 
@@ -127,21 +109,47 @@ export const PATCH = async (request, { params }) => {
 // Handles DELETE requests to remove a specific lunch idea by its ID
 export const DELETE = async (request, { params }) => {
   try {
+    const session = await getServerSession(authOptions);
+
+    if (!session?.user?.id) {
+      return new Response(JSON.stringify({ message: "Authentication required" }), {
+        status: 401,
+        headers: { "Content-Type": "application/json" },
+      });
+    }
+
     await connectToDatabase();
 
-    // Log the lunchIdea ID to the console and remove it
-    console.log("Trying to remove Item ID: ", params.id);
+    const existingLunchIdea = await LunchIdea.findById(params.id);
 
-    // Find the lunchIdea by ID and remove it
+    if (!existingLunchIdea) {
+      return new Response(JSON.stringify({ message: "LunchIdea not found" }), {
+        status: 404,
+        headers: { "Content-Type": "application/json" },
+      });
+    }
+
+    if (existingLunchIdea.creator.toString() !== session.user.id) {
+      return new Response(JSON.stringify({ message: "Forbidden" }), {
+        status: 403,
+        headers: { "Content-Type": "application/json" },
+      });
+    }
+
     await LunchIdea.deleteOne({ _id: params.id });
 
-    // Return a success response
-    return new Response("LunchIdea deleted successfully", { status: 200 });
+    return new Response(
+      JSON.stringify({ message: "LunchIdea deleted successfully" }),
+      {
+        status: 200,
+        headers: { "Content-Type": "application/json" },
+      },
+    );
   } catch (error) {
     console.error("Error deleting lunchIdea: ", error.message);
-    // Return an error response
-    return new Response("Error deleting lunchIdea: " + error.message, {
+    return new Response(JSON.stringify({ message: "Error deleting lunchIdea" }), {
       status: 500,
+      headers: { "Content-Type": "application/json" },
     });
   }
 };

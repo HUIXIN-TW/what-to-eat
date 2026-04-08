@@ -57,6 +57,9 @@ Create a `.env.local` file at the root of your project and add the following:
 ```env
 MONGODB_URI=your_mongodb_connection_string
 NEXTAUTH_URL=http://localhost:3000
+GOOGLE_ID=your_google_oauth_client_id
+GOOGLE_CLIENT_SECRET=your_google_oauth_client_secret
+NEXTAUTH_SECRET=your_random_secret
 ```
 
 Replace `your_mongodb_connection_string` with your actual MongoDB connection string.
@@ -75,6 +78,45 @@ Navigate to `http://localhost:3000` in your browser to see the app running.
 
 - **Viewing Lunch Options:** Simply click on the "Show Lunch Options" span on the homepage to display the list of available lunch options.
 - **User Authentication:** (If implemented) Use the login/logout buttons to authenticate. Once logged in, you will see personalized lunch options based on your preferences.
+
+## Deploying to Cloudflare
+
+This project is a dynamic Next.js app. It uses NextAuth, MongoDB, and route handlers, so it should be deployed to **Cloudflare Workers with the OpenNext adapter**, not as a static export.
+
+Suggested migration path:
+
+1. Keep the current app stable locally first.
+2. When you are ready to deploy, add the Cloudflare runtime dependencies:
+
+```bash
+npm i @opennextjs/cloudflare@latest
+npm i -D wrangler@latest
+```
+
+3. Add a `wrangler.jsonc` file with:
+   - a current `compatibility_date`
+   - `nodejs_compat` enabled
+4. Add `open-next.config.ts` using the Cloudflare adapter.
+5. Add Cloudflare secrets for:
+   - `MONGODB_URI`
+   - `GOOGLE_ID`
+   - `GOOGLE_CLIENT_SECRET`
+   - `NEXTAUTH_SECRET`
+   - `NEXTAUTH_URL`
+6. Preview in the Workers runtime before cutover.
+7. Deploy to Workers after validating auth and MongoDB connectivity end to end.
+
+Important notes:
+
+- Cloudflare recommends Workers for full-stack Next.js apps.
+- Static Pages export is only appropriate for fully static Next.js sites.
+- Because this app uses `mongoose`, you should verify the MongoDB path in the Workers runtime before switching production traffic.
+
+References:
+
+- https://developers.cloudflare.com/workers/framework-guides/web-apps/nextjs/
+- https://developers.cloudflare.com/pages/framework-guides/nextjs/
+- https://developers.cloudflare.com/pages/framework-guides/nextjs/deploy-a-static-nextjs-site/
 
 ## Contributing
 

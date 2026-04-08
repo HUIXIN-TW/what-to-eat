@@ -71,7 +71,6 @@ const CopyLunchIdea = () => {
         body: JSON.stringify({
           lunchIdea: post.lunchIdea.toString(),
           lunchBudget: post.lunchBudget?.toString() || "",
-          userId: session?.user.id,
           cafeName: post.cafeName.toString(),
           cafeLocation: post.cafeLocation?.toString() || "",
           cafeWebsite: post.cafeWebsite?.toString() || "",
