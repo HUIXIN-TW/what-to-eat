@@ -15,9 +15,10 @@ import { validateLunchIdeaPayload } from "@utils/lunchidea";
 export const GET = async (request, { params }) => {
   try {
     await connectToDatabase();
+    const { id } = await params;
 
     // Find the lunch idea by ID and populate the 'creator' field to include creator details
-    const lunchIdea = await LunchIdea.findById(params.id).populate("creator");
+    const lunchIdea = await LunchIdea.findById(id).populate("creator");
 
     // If no lunch idea is found, return a 404 error
     if (!lunchIdea) return new Response("LunchIdea Not Found", { status: 404 });
@@ -38,13 +39,17 @@ export const GET = async (request, { params }) => {
  */
 export const PATCH = async (request, { params }) => {
   try {
+    const { id } = await params;
     const session = await getServerSession(authOptions);
 
     if (!session?.user?.id) {
-      return new Response(JSON.stringify({ message: "Authentication required" }), {
-        status: 401,
-        headers: { "Content-Type": "application/json" },
-      });
+      return new Response(
+        JSON.stringify({ message: "Authentication required" }),
+        {
+          status: 401,
+          headers: { "Content-Type": "application/json" },
+        },
+      );
     }
 
     await connectToDatabase();
@@ -52,13 +57,16 @@ export const PATCH = async (request, { params }) => {
     const { data, errors } = validateLunchIdeaPayload(payload);
 
     if (errors.length > 0) {
-      return new Response(JSON.stringify({ message: "Validation failed", errors }), {
-        status: 400,
-        headers: { "Content-Type": "application/json" },
-      });
+      return new Response(
+        JSON.stringify({ message: "Validation failed", errors }),
+        {
+          status: 400,
+          headers: { "Content-Type": "application/json" },
+        },
+      );
     }
 
-    const existingLunchIdea = await LunchIdea.findById(params.id);
+    const existingLunchIdea = await LunchIdea.findById(id);
 
     if (!existingLunchIdea) {
       return new Response(JSON.stringify({ message: "LunchIdea not found" }), {
@@ -109,18 +117,22 @@ export const PATCH = async (request, { params }) => {
 // Handles DELETE requests to remove a specific lunch idea by its ID
 export const DELETE = async (request, { params }) => {
   try {
+    const { id } = await params;
     const session = await getServerSession(authOptions);
 
     if (!session?.user?.id) {
-      return new Response(JSON.stringify({ message: "Authentication required" }), {
-        status: 401,
-        headers: { "Content-Type": "application/json" },
-      });
+      return new Response(
+        JSON.stringify({ message: "Authentication required" }),
+        {
+          status: 401,
+          headers: { "Content-Type": "application/json" },
+        },
+      );
     }
 
     await connectToDatabase();
 
-    const existingLunchIdea = await LunchIdea.findById(params.id);
+    const existingLunchIdea = await LunchIdea.findById(id);
 
     if (!existingLunchIdea) {
       return new Response(JSON.stringify({ message: "LunchIdea not found" }), {
@@ -136,7 +148,7 @@ export const DELETE = async (request, { params }) => {
       });
     }
 
-    await LunchIdea.deleteOne({ _id: params.id });
+    await LunchIdea.deleteOne({ _id: id });
 
     return new Response(
       JSON.stringify({ message: "LunchIdea deleted successfully" }),
@@ -147,9 +159,12 @@ export const DELETE = async (request, { params }) => {
     );
   } catch (error) {
     console.error("Error deleting lunchIdea: ", error.message);
-    return new Response(JSON.stringify({ message: "Error deleting lunchIdea" }), {
-      status: 500,
-      headers: { "Content-Type": "application/json" },
-    });
+    return new Response(
+      JSON.stringify({ message: "Error deleting lunchIdea" }),
+      {
+        status: 500,
+        headers: { "Content-Type": "application/json" },
+      },
+    );
   }
 };

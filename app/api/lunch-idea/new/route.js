@@ -42,9 +42,12 @@ export const POST = async (request) => {
     );
   } catch (error) {
     console.error(error);
-    return new Response(JSON.stringify({ error: "Failed to create a new lunch idea" }), {
-      status: 500,
-      headers: { "Content-Type": "application/json" },
-    });
+    return new Response(
+      JSON.stringify({ error: "Failed to create a new lunch idea" }),
+      {
+        status: 500,
+        headers: { "Content-Type": "application/json" },
+      },
+    );
   }
 };

@@ -1,12 +1,12 @@
 "use client";
 
 import { useSession } from "next-auth/react";
-import { useEffect, useState } from "react";
+import { Suspense, useEffect, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 
 import Form from "@components/Form";
 
-const UpdateLunchIdea = () => {
+const UpdateLunchIdeaContent = () => {
   const router = useRouter();
   const { data: session } = useSession();
   const [submitting, setIsSubmitting] = useState(false);
@@ -109,5 +109,11 @@ const UpdateLunchIdea = () => {
     />
   );
 };
+
+const UpdateLunchIdea = () => (
+  <Suspense fallback={<p className="desc">Loading lunch idea...</p>}>
+    <UpdateLunchIdeaContent />
+  </Suspense>
+);
 
 export default UpdateLunchIdea;

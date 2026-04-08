@@ -1,15 +1,17 @@
 "use client";
 
-import { useState } from "react";
+import { Suspense, useEffect, useState } from "react";
 import { useSession } from "next-auth/react";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 
 import Form from "@components/Form";
 
-const AddLunchIdea = () => {
+const AddLunchIdeaContent = () => {
   const router = useRouter();
   const { data: session } = useSession();
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const searchParams = useSearchParams();
+  const sourceLunchIdeaId = searchParams.get("id");
 
   // Initially, set post state to empty values
   const [post, setPost] = useState({
@@ -21,6 +23,28 @@ const AddLunchIdea = () => {
     cafeWebsite: "",
     walkingTime: "",
   });
+
+  useEffect(() => {
+    const preloadFromExistingIdea = async () => {
+      const response = await fetch(`/api/lunch-idea/${sourceLunchIdeaId}`);
+      if (!response.ok) return;
+
+      const data = await response.json();
+      setPost({
+        lunchIdea: data.lunchIdea || "",
+        lunchBudget: data.lunchBudget || "",
+        tags: Array.isArray(data.tags) ? data.tags.join(" ") : data.tags || "",
+        cafeName: data.cafeName || "",
+        cafeLocation: data.cafeLocation || "",
+        cafeWebsite: data.cafeWebsite || "",
+        walkingTime: data.walkingTime || "",
+      });
+    };
+
+    if (sourceLunchIdeaId) {
+      preloadFromExistingIdea();
+    }
+  }, [sourceLunchIdeaId]);
 
   const addLunchIdea = async (e) => {
     // Prevent default form submission behavior
@@ -78,5 +102,11 @@ const AddLunchIdea = () => {
     </>
   );
 };
+
+const AddLunchIdea = () => (
+  <Suspense fallback={<p className="desc">Loading lunch idea...</p>}>
+    <AddLunchIdeaContent />
+  </Suspense>
+);
 
 export default AddLunchIdea;

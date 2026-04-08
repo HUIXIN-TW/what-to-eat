@@ -1,48 +1,40 @@
 "use client";
 
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef, useCallback } from "react";
 
 const SlotMachine = ({ posts }) => {
   console.log("posts", posts);
   const [spinning, setSpinning] = useState(false);
   const doorsRefs = useRef([]);
 
-  useEffect(() => {
-    doorsRefs.current = doorsRefs.current.slice(0, 3);
-    init(true, 1, 2); // Initialize the slot machine, showing "?" in the box
+  const shuffle = useCallback(([...arr]) => {
+    let m = arr.length;
+    while (m) {
+      const i = Math.floor(Math.random() * m--);
+      [arr[m], arr[i]] = [arr[i], arr[m]];
+    }
+    return arr;
   }, []);
 
-  const spin = async () => {
-    setSpinning(true);
-    init(false, 1, 2);
-    for (const door of doorsRefs.current) {
-      const boxes = door.querySelector(".boxes");
-      const duration =
-        parseFloat(getComputedStyle(boxes).transitionDuration) * 500; // Convert seconds to milliseconds
-      boxes.style.transform = "translateY(0)";
-      await new Promise((resolve) => setTimeout(resolve, duration));
-    }
-    setSpinning(false);
-  };
+  const init = useCallback(
+    (firstInit = true, groups = 1, duration = 1) => {
+      doorsRefs.current.forEach((door, index) => {
+        if (firstInit) {
+          door.dataset.spinned = "0";
+        } else if (door.dataset.spinned === "1") {
+          return;
+        }
 
-  const init = (firstInit = true, groups = 1, duration = 1) => {
-    doorsRefs.current.forEach((door, index) => {
-      if (firstInit) {
-        door.dataset.spinned = "0";
-      } else if (door.dataset.spinned === "1") {
-        return;
-      }
+        const boxes = door.querySelector(".boxes");
+        const boxesClone = boxes.cloneNode(true); // Clone all child nodes as well
 
-      const boxes = door.querySelector(".boxes");
-      const boxesClone = boxes.cloneNode(true); // Clone all child nodes as well
-
-      const pool = ["☕️🍵🧃🥛🧋🍱🍣🍔🌭🥯❓"];
-      if (!firstInit) {
-        const arr = [];
-        for (let n = 0; n < (groups > 0 ? groups : 1); n++) {
-          arr.push(
-            ...posts.map(
-              (post) => `
+        const pool = ["☕️🍵🧃🥛🧋🍱🍣🍔🌭🥯❓"];
+        if (!firstInit) {
+          const arr = [];
+          for (let n = 0; n < (groups > 0 ? groups : 1); n++) {
+            arr.push(
+              ...posts.map(
+                (post) => `
               <div class="idea_card w-full m-1">
                 <h3 class="font-satoshi font-semibold text-gray-900 text-lg">
                   ${post.lunchIdea}
@@ -87,57 +79,68 @@ const SlotMachine = ({ posts }) => {
                 </div>
               </div>
             `,
-            ),
-          );
+              ),
+            );
+          }
+
+          pool.push(...shuffle(arr));
         }
 
-        pool.push(...shuffle(arr));
-      }
+        boxesClone.innerHTML = ""; // Clear the clone for new content
+        for (let i = pool.length - 1; i >= 0; i--) {
+          const box = document.createElement("div");
+          box.classList.add("box");
+          box.style.width = door.clientWidth + "px";
+          box.style.height = door.clientHeight + "px";
 
-      boxesClone.innerHTML = ""; // Clear the clone for new content
-      for (let i = pool.length - 1; i >= 0; i--) {
-        const box = document.createElement("div");
-        box.classList.add("box");
-        box.style.width = door.clientWidth + "px";
-        box.style.height = door.clientHeight + "px";
+          const content = pool[i];
 
-        const content = pool[i];
+          box.innerHTML = content;
+          boxesClone.appendChild(box);
+        }
 
-        box.innerHTML = content;
-        boxesClone.appendChild(box);
-      }
+        boxesClone.style.transitionDuration = `${duration}s`;
+        boxesClone.style.transform = `translateY(-${
+          door.clientHeight * (pool.length - 1)
+        }px)`;
+        door.replaceChild(boxesClone, boxes);
 
-      boxesClone.style.transitionDuration = `${duration}s`;
-      boxesClone.style.transform = `translateY(-${
-        door.clientHeight * (pool.length - 1)
-      }px)`;
-      door.replaceChild(boxesClone, boxes);
-
-      boxesClone.querySelectorAll(".clickable").forEach((element) => {
-        element.addEventListener("click", () => {
-          const type = element.getAttribute("data-type");
-          const url = element.getAttribute("data-url");
-          if (type === "url") {
-            // Assuming URLs are already fully qualified
-            window.open(url, "_blank", "noopener,noreferrer");
-          } else if (type === "location") {
-            // For location, we encode it for use in a Google Maps search URL
-            const mapsUrl = `https://www.google.com/maps/search/?api=1&query=${url}`;
-            window.open(mapsUrl, "_blank", "noopener,noreferrer");
-          }
+        boxesClone.querySelectorAll(".clickable").forEach((element) => {
+          element.addEventListener("click", () => {
+            const type = element.getAttribute("data-type");
+            const url = element.getAttribute("data-url");
+            if (type === "url") {
+              // Assuming URLs are already fully qualified
+              window.open(url, "_blank", "noopener,noreferrer");
+            } else if (type === "location") {
+              // For location, we encode it for use in a Google Maps search URL
+              const mapsUrl = `https://www.google.com/maps/search/?api=1&query=${url}`;
+              window.open(mapsUrl, "_blank", "noopener,noreferrer");
+            }
+          });
         });
       });
-    });
+    },
+    [posts, shuffle],
+  );
+
+  const spin = async () => {
+    setSpinning(true);
+    init(false, 1, 2);
+    for (const door of doorsRefs.current) {
+      const boxes = door.querySelector(".boxes");
+      const duration =
+        parseFloat(getComputedStyle(boxes).transitionDuration) * 500; // Convert seconds to milliseconds
+      boxes.style.transform = "translateY(0)";
+      await new Promise((resolve) => setTimeout(resolve, duration));
+    }
+    setSpinning(false);
   };
 
-  const shuffle = ([...arr]) => {
-    let m = arr.length;
-    while (m) {
-      const i = Math.floor(Math.random() * m--);
-      [arr[m], arr[i]] = [arr[i], arr[m]];
-    }
-    return arr;
-  };
+  useEffect(() => {
+    doorsRefs.current = doorsRefs.current.slice(0, 3);
+    init(true, 1, 2); // Initialize the slot machine, showing "?" in the box
+  }, [init]);
 
   const setDoorRef = (element, index) => {
     doorsRefs.current[index] = element;

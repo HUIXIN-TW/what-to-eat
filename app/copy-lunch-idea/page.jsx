@@ -1,12 +1,12 @@
 "use client";
 
 import { useSession } from "next-auth/react";
-import { useEffect, useState } from "react";
+import { Suspense, useEffect, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 
 import Form from "@components/Form";
 
-const CopyLunchIdea = () => {
+const CopyLunchIdeaContent = () => {
   const router = useRouter();
   const { data: session } = useSession();
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -45,7 +45,6 @@ const CopyLunchIdea = () => {
         tags: data.tags,
       });
     };
-    console.log("post", post);
     // Only fetching prompt details if a promptId is present
     if (lunchIdeaId) getLunchIdeaDetails();
   }, [lunchIdeaId]); // Dependency array to re-run the effect if Id changes
@@ -112,5 +111,11 @@ const CopyLunchIdea = () => {
     </>
   );
 };
+
+const CopyLunchIdea = () => (
+  <Suspense fallback={<p className="desc">Loading lunch idea...</p>}>
+    <CopyLunchIdeaContent />
+  </Suspense>
+);
 
 export default CopyLunchIdea;

@@ -4,9 +4,10 @@ import { connectToDatabase } from "@utils/database";
 export const GET = async (request, { params }) => {
   try {
     await connectToDatabase();
+    const { id } = await params;
 
-    // Fetch lunchIdeas created by user with id params.id
-    const lunchIdeas = await LunchIdea.find({ creator: params.id }).populate(
+    // Fetch lunchIdeas created by user with id
+    const lunchIdeas = await LunchIdea.find({ creator: id }).populate(
       "creator",
     );
 

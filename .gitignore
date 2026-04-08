@@ -12,6 +12,8 @@
 # next.js
 /.next/
 /out/
+/.open-next/
+.wrangler/
 
 # production
 /build
@@ -22,4 +24,5 @@
 # local env files
 .env
 .env*.local
+.dev.vars*
 package-lock.json

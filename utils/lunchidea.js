@@ -116,7 +116,12 @@ export function validateLunchIdeaPayload(payload) {
   validateLength("Lunch idea", lunchIdea, MAX_LENGTH.lunchIdea, errors);
   validateLength("Lunch budget", lunchBudget, MAX_LENGTH.lunchBudget, errors);
   validateLength("Cafe name", cafeName, MAX_LENGTH.cafeName, errors);
-  validateLength("Cafe location", cafeLocation, MAX_LENGTH.cafeLocation, errors);
+  validateLength(
+    "Cafe location",
+    cafeLocation,
+    MAX_LENGTH.cafeLocation,
+    errors,
+  );
   validateLength("Cafe website", cafeWebsite, MAX_LENGTH.cafeWebsite, errors);
 
   return {

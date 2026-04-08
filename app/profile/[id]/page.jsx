@@ -1,12 +1,15 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { use, useEffect, useState } from "react";
 import { useSearchParams } from "next/navigation";
 
 import Profile from "@components/Profile";
 
 // UserProfile component receives `params` prop from its parent or router
 const UserProfile = ({ params }) => {
+  const resolvedParams = use(params);
+  const userId = resolvedParams?.id;
+
   // Utilizing the useSearchParams hook from Next.js to work with query parameters
   const searchParams = useSearchParams();
 
@@ -16,11 +19,11 @@ const UserProfile = ({ params }) => {
   // State to hold the posts belonging to the user
   const [userPosts, setUserPosts] = useState([]);
 
-  // useEffect hook to fetch user posts when the component mounts or `params.id` changes
+  // useEffect hook to fetch user posts when the component mounts or `userId` changes
   useEffect(() => {
     const fetchPosts = async () => {
-      // Fetching posts from the backend API using the user ID from params
-      const response = await fetch(`/api/users/${params?.id}/posts`);
+      // Fetching posts from the backend API using the resolved user ID
+      const response = await fetch(`/api/users/${userId}/posts`);
 
       // Parsing the JSON response to get the data
       const data = await response.json();
@@ -30,8 +33,8 @@ const UserProfile = ({ params }) => {
     };
 
     // Only fetch posts if there's a user ID in the params
-    if (params?.id) fetchPosts();
-  }, [params.id]); // Dependency array ensures this effect runs when `params.id` changes
+    if (userId) fetchPosts();
+  }, [userId]); // Dependency array ensures this effect runs when user ID changes
 
   // Rendering the Profile component with props based on the fetched data and URL parameters
 

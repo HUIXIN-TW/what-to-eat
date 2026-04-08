@@ -86,31 +86,46 @@ This project is a dynamic Next.js app. It uses NextAuth, MongoDB, and route hand
 Suggested migration path:
 
 1. Keep the current app stable locally first.
-2. When you are ready to deploy, add the Cloudflare runtime dependencies:
+2. Install the Cloudflare runtime dependencies:
 
 ```bash
-npm i @opennextjs/cloudflare@latest
-npm i -D wrangler@latest
+npm install
 ```
 
-3. Add a `wrangler.jsonc` file with:
-   - a current `compatibility_date`
-   - `nodejs_compat` enabled
-4. Add `open-next.config.ts` using the Cloudflare adapter.
-5. Add Cloudflare secrets for:
+3. Create a local `.dev.vars` file from `.dev.vars.example` when you want to preview the Worker locally.
+4. Use the new scripts:
+
+```bash
+npm run preview
+npm run deploy
+```
+
+5. Add Cloudflare runtime secrets for:
    - `MONGODB_URI`
    - `GOOGLE_ID`
    - `GOOGLE_CLIENT_SECRET`
    - `NEXTAUTH_SECRET`
    - `NEXTAUTH_URL`
-6. Preview in the Workers runtime before cutover.
-7. Deploy to Workers after validating auth and MongoDB connectivity end to end.
+6. Keep the Cloudflare-side variables after deploys:
+
+```bash
+npm run deploy -- --keep-vars
+```
+
+7. Update the Google OAuth allowed redirect URI to match the deployed domain:
+
+```text
+https://<your-worker-domain>/api/auth/callback/google
+```
+
+8. Deploy to Workers after validating auth and MongoDB connectivity end to end.
 
 Important notes:
 
 - Cloudflare recommends Workers for full-stack Next.js apps.
 - Static Pages export is only appropriate for fully static Next.js sites.
 - Because this app uses `mongoose`, you should verify the MongoDB path in the Workers runtime before switching production traffic.
+- `.dev.vars` and `.env` files should stay local. Production runtime values belong in Cloudflare secrets or environment variables.
 
 References:
 

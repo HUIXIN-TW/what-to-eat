@@ -1,8 +1,5 @@
 const nextConfig = {
-  experimental: {
-    missingSuspenseWithCSRBailout: false,
-    serverComponentsExternalPackages: ["mongoose"],
-  },
+  serverExternalPackages: ["mongoose"],
   images: {
     remotePatterns: [
       {
@@ -10,13 +7,6 @@ const nextConfig = {
         protocol: "https",
       },
     ],
-  },
-  webpack(config) {
-    config.experiments = {
-      ...config.experiments,
-      topLevelAwait: true,
-    };
-    return config;
   },
 };
 

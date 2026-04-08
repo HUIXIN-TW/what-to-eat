@@ -1,11 +1,9 @@
-import { useState, useEffect } from "react";
+import { useMemo, useState } from "react";
 import LunchIdeaCard from "./LunchIdeaCard";
 import SelectedLunchIdeaCard from "./SelectedLunchIdeaCard";
 import SlotMachine from "./SlotMachine";
 
 const Profile = ({ name, desc, data, handleEdit, handleDelete }) => {
-  const [randomPost, setRandomPost] = useState(null);
-  const [randomPostList, setRandomPostList] = useState(null);
   const [showSlotMachine, setShowSlotMachine] = useState(false);
 
   // Function to toggle the visibility of SlotMachine
@@ -13,33 +11,24 @@ const Profile = ({ name, desc, data, handleEdit, handleDelete }) => {
     setShowSlotMachine(!showSlotMachine);
   };
 
-  // Function to handle random selection
-  const handleRandomSelection = () => {
-    if (data.length === 0) return;
+  const randomPostList = useMemo(() => {
+    if (data.length === 0) {
+      return null;
+    }
+    const seed = data.reduce((acc, post) => {
+      const id = String(post?._id || "");
+      for (let i = 0; i < id.length; i++) {
+        acc += id.charCodeAt(i);
+      }
+      return acc;
+    }, 0);
 
-    // Select a single random post
-    const singleRandomIndex = Math.floor(Math.random() * data.length);
-    const singleRandomPost = data[singleRandomIndex];
-    setRandomPost(singleRandomPost);
-    console.log("singleRandomPost", singleRandomPost);
-
-    // Select 10 random posts
     const selectedPosts = [];
     for (let i = 0; i < 10; i++) {
-      const randomIndex = Math.floor(Math.random() * data.length);
+      const randomIndex = (seed + i * 7) % data.length;
       selectedPosts.push(data[randomIndex]);
     }
-    setRandomPostList(selectedPosts);
-    console.log("selectedPosts", selectedPosts);
-  };
-
-  // Function to clear random selection
-  const handleClearRandomSelection = () => {
-    setRandomPost(null);
-  };
-
-  useEffect(() => {
-    handleRandomSelection();
+    return selectedPosts;
   }, [data]);
 
   return (

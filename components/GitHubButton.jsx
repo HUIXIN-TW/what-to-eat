@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import { useState } from "react";
 
 const GitHubButton = ({ text }) => {
@@ -16,7 +17,7 @@ const GitHubButton = ({ text }) => {
           target="_blank" // Open link in a new tab
           rel="noopener noreferrer" // Security for opening links in a new tab
         >
-          <img
+          <Image
             src={
               isHovered
                 ? "/assets/icons/github-mark.svg"
@@ -35,7 +36,7 @@ const GitHubButton = ({ text }) => {
           target="_blank" // Open link in a new tab
           rel="noopener noreferrer" // Security for opening links in a new tab
         >
-          <img
+          <Image
             src="/assets/icons/github-mark.svg"
             alt="GitHub Logo"
             width={30}

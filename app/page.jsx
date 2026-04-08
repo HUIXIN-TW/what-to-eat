@@ -15,34 +15,30 @@ const Home = () => {
   // Access the current session data using useSession hook from next-auth
   const { data: session } = useSession();
 
-  const fetchPosts = async () => {
-    setIsLoading(true);
-    setError(null);
-    try {
-      console.log("Fetching data...");
-      // console.log("session", session?.user?.id);
-      let response;
-      if (session?.user?.id) {
-        response = await fetch(`/api/users/${session.user.id}`);
-      } else {
-        response = await fetch(`/api/lunch-idea`);
-      }
-      const data = await response.json();
-
-      // Update the state with the fetched posts
-      setAllPosts(data);
-    } catch (error) {
-      console.error("Failed to fetch data:", error.message);
-      setError(error.message);
-    } finally {
-      setIsLoading(false);
-    }
-  };
-
   // Fetch posts on initial render
   useEffect(() => {
+    const fetchPosts = async () => {
+      setIsLoading(true);
+      setError(null);
+      try {
+        console.log("Fetching data...");
+        const response = session?.user?.id
+          ? await fetch(`/api/users/${session.user.id}`)
+          : await fetch("/api/lunch-idea");
+        const data = await response.json();
+
+        // Update the state with the fetched posts
+        setAllPosts(data);
+      } catch (error) {
+        console.error("Failed to fetch data:", error.message);
+        setError(error.message);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
     fetchPosts();
-  }, [session]);
+  }, [session?.user?.id]);
 
   return (
     <section className="w-full flex-center flex-col">
